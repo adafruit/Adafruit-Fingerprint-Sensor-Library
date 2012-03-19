@@ -1,3 +1,18 @@
+/*************************************************** 
+  This is a library for our optical Fingerprint sensor
+
+  Designed specifically to work with the Adafruit BMP085 Breakout 
+  ----> http://www.adafruit.com/products/751
+
+  These displays use TTL Serial to communicate, 2 pins are required to 
+  interface
+  Adafruit invests time and resources providing this open source code, 
+  please support Adafruit and open-source hardware by purchasing 
+  products from Adafruit!
+
+  Written by Limor Fried/Ladyada for Adafruit Industries.  
+  BSD license, all text above must be included in any redistribution
+ ****************************************************/
 
 #if (ARDUINO >= 100)
  #include "Arduino.h"
@@ -15,6 +30,8 @@
 #define FINGERPRINT_FEATUREFAIL 0x07
 #define FINGERPRINT_NOMATCH 0x08
 #define FINGERPRINT_NOTFOUND 0x09
+#define FINGERPRINT_ENROLLMISMATCH 0x0A
+#define FINGERPRINT_BADLOCATION 0x0B
 #define FINGERPRINT_DBRANGEFAIL 0x0C
 #define FINGERPRINT_UPLOADFEATUREFAIL 0x0D
 #define FINGERPRINT_PACKETRESPONSEFAIL 0x0E
@@ -40,6 +57,8 @@
 
 #define FINGERPRINT_GETIMAGE 0x01
 #define FINGERPRINT_IMAGE2TZ 0x02
+#define FINGERPRINT_REGMODEL 0x05
+#define FINGERPRINT_STORE 0x06
 #define FINGERPRINT_VERIFYPASSWORD 0x13
 #define FINGERPRINT_HISPEEDSEARCH 0x1B
 
@@ -55,7 +74,9 @@ class Adafruit_Fingerprint {
 
   boolean verifyPassword(void);
   uint8_t getImage(void);
-  uint8_t image2Tz(void);
+  uint8_t image2Tz(uint8_t slot = 1);
+  uint8_t createModel(void);
+  uint8_t storeModel(uint16_t id);
   uint8_t fingerFastSearch(void);
   void writePacket(uint32_t addr, uint8_t packettype, uint16_t len, uint8_t *packet);
   uint8_t getReply(uint8_t packet[], uint16_t timeout=DEFAULTTIMEOUT);

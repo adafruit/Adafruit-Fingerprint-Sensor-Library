@@ -1,7 +1,7 @@
 This is a library for our optical Fingerprint sensor
 
   Pick one up today in the adafruit shop!
-  ------> http://www.adafruit.com/
+  ------> http://www.adafruit.com/products/751
 
 These displays use TTL Serial to communicate, 2 pins are required to  
 interface

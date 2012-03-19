@@ -1,10 +1,10 @@
 /*************************************************** 
-  This is a library for the BMP085 Barometric Pressure & Temp Sensor
+  This is a library for our optical Fingerprint sensor
 
   Designed specifically to work with the Adafruit BMP085 Breakout 
-  ----> https://www.adafruit.com/products/391
+  ----> http://www.adafruit.com/products/751
 
-  These displays use I2C to communicate, 2 pins are required to  
+  These displays use TTL Serial to communicate, 2 pins are required to 
   interface
   Adafruit invests time and resources providing this open source code, 
   please support Adafruit and open-source hardware by purchasing 
@@ -63,8 +63,8 @@ uint8_t Adafruit_Fingerprint::getImage(void) {
   return packet[1];
 }
 
-uint8_t Adafruit_Fingerprint::image2Tz(void) {
-  uint8_t packet[] = {FINGERPRINT_IMAGE2TZ, 1};  // store in slot #1
+uint8_t Adafruit_Fingerprint::image2Tz(uint8_t slot) {
+  uint8_t packet[] = {FINGERPRINT_IMAGE2TZ, slot};
   writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
   uint8_t len = getReply(packet);
   
@@ -74,6 +74,26 @@ uint8_t Adafruit_Fingerprint::image2Tz(void) {
 }
 
 
+uint8_t Adafruit_Fingerprint::createModel(void) {
+  uint8_t packet[] = {FINGERPRINT_REGMODEL};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t len = getReply(packet);
+  
+  if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
+   return -1;
+  return packet[1];
+}
+
+
+uint8_t Adafruit_Fingerprint::storeModel(uint16_t id) {
+  uint8_t packet[] = {FINGERPRINT_STORE, 0x01, id >> 8, id & 0xFF};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t len = getReply(packet);
+  
+  if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
+   return -1;
+  return packet[1];
+}
 
 uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   fingerID = 0xFFFF;
