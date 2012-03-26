@@ -18,11 +18,17 @@
 #include <util/delay.h>
 #if (ARDUINO >= 100)
   #include <SoftwareSerial.h>
+#else
+  #include <NewSoftSerial.h>
 #endif
 
 //static SoftwareSerial mySerial = SoftwareSerial(2, 3);
 
+#if ARDUINO >= 100
 Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss) {
+#else
+Adafruit_Fingerprint::Adafruit_Fingerprint(NewSoftSerial *ss) {
+#endif
   thePassword = 0;
   theAddress = 0xFFFFFFFF;
 
@@ -141,7 +147,8 @@ void Adafruit_Fingerprint::writePacket(uint32_t addr, uint8_t packettype,
   Serial.print(" 0x");
   Serial.print((uint8_t)(len), HEX);
 #endif
-  
+ 
+#if ARDUINO >= 100
   mySerial->write((uint8_t)(FINGERPRINT_STARTCODE >> 8));
   mySerial->write((uint8_t)FINGERPRINT_STARTCODE);
   mySerial->write((uint8_t)(addr >> 24));
@@ -151,10 +158,25 @@ void Adafruit_Fingerprint::writePacket(uint32_t addr, uint8_t packettype,
   mySerial->write((uint8_t)packettype);
   mySerial->write((uint8_t)(len >> 8));
   mySerial->write((uint8_t)(len));
+#else
+  mySerial->print((uint8_t)(FINGERPRINT_STARTCODE >> 8), BYTE);
+  mySerial->print((uint8_t)FINGERPRINT_STARTCODE, BYTE);
+  mySerial->print((uint8_t)(addr >> 24), BYTE);
+  mySerial->print((uint8_t)(addr >> 16), BYTE);
+  mySerial->print((uint8_t)(addr >> 8), BYTE);
+  mySerial->print((uint8_t)(addr), BYTE);
+  mySerial->print((uint8_t)packettype, BYTE);
+  mySerial->print((uint8_t)(len >> 8), BYTE);
+  mySerial->print((uint8_t)(len), BYTE);
+#endif
   
   uint16_t sum = (len>>8) + (len&0xFF) + packettype;
   for (uint8_t i=0; i< len-2; i++) {
+#if ARDUINO >= 100
     mySerial->write((uint8_t)(packet[i]));
+#else
+    mySerial->print((uint8_t)(packet[i]), BYTE);
+#endif
 #ifdef FINGERPRINT_DEBUG
     Serial.print(" 0x"); Serial.print(packet[i], HEX);
 #endif
@@ -165,8 +187,13 @@ void Adafruit_Fingerprint::writePacket(uint32_t addr, uint8_t packettype,
   Serial.print(" 0x"); Serial.print((uint8_t)(sum>>8), HEX);
   Serial.print(" 0x"); Serial.println((uint8_t)(sum), HEX);
 #endif
+#if ARDUINO >= 100
   mySerial->write((uint8_t)(sum>>8));
   mySerial->write((uint8_t)sum);
+#else
+  mySerial->print((uint8_t)(sum>>8), BYTE);
+  mySerial->print((uint8_t)sum, BYTE);
+#endif
 }
 
 

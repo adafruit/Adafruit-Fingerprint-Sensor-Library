@@ -19,6 +19,7 @@
  #include <SoftwareSerial.h>
 #else
  #include "WProgram.h"
+ #include <NewSoftSerial.h>
 #endif
 
 
@@ -69,7 +70,11 @@
 
 class Adafruit_Fingerprint {
  public:
+#if ARDUINO >= 100
   Adafruit_Fingerprint(SoftwareSerial *);
+#else
+  Adafruit_Fingerprint(NewSoftSerial *);
+#endif
   void begin(uint16_t baud);
 
   boolean verifyPassword(void);
@@ -86,5 +91,9 @@ class Adafruit_Fingerprint {
  private: 
   uint32_t thePassword;
   uint32_t theAddress;
+#if ARDUINO >= 100
   SoftwareSerial *mySerial;
+#else
+  NewSoftSerial *mySerial;
+#endif
 };
