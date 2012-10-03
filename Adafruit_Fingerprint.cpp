@@ -101,6 +101,16 @@ uint8_t Adafruit_Fingerprint::storeModel(uint16_t id) {
   return packet[1];
 }
 
+uint8_t Adafruit_Fingerprint::emptyDatabase(void) {
+  uint8_t packet[] = {FINGERPRINT_EMPTY};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t len = getReply(packet);
+  
+  if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
+   return -1;
+  return packet[1];
+}
+
 uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   fingerID = 0xFFFF;
   confidence = 0xFFFF;
@@ -119,6 +129,23 @@ uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   confidence = packet[4];
   confidence <<= 8;
   confidence |= packet[5];
+  
+  return packet[1];
+}
+
+uint8_t Adafruit_Fingerprint::getTemplateCount(void) {
+  templateCount = 0xFFFF;
+  // get number of templates in memory
+  uint8_t packet[] = {FINGERPRINT_TEMPLATECOUNT};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t len = getReply(packet);
+  
+  if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
+   return -1;
+
+  templateCount = packet[2];
+  templateCount <<= 8;
+  templateCount |= packet[3];
   
   return packet[1];
 }

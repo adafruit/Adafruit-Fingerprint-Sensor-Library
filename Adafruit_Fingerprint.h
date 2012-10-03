@@ -60,8 +60,10 @@
 #define FINGERPRINT_IMAGE2TZ 0x02
 #define FINGERPRINT_REGMODEL 0x05
 #define FINGERPRINT_STORE 0x06
+#define FINGERPRINT_EMPTY 0x0D
 #define FINGERPRINT_VERIFYPASSWORD 0x13
 #define FINGERPRINT_HISPEEDSEARCH 0x1B
+#define FINGERPRINT_TEMPLATECOUNT 0x1D
 
 //#define FINGERPRINT_DEBUG 
 
@@ -81,12 +83,14 @@ class Adafruit_Fingerprint {
   uint8_t getImage(void);
   uint8_t image2Tz(uint8_t slot = 1);
   uint8_t createModel(void);
+  uint8_t emptyDatabase(void);
   uint8_t storeModel(uint16_t id);
   uint8_t fingerFastSearch(void);
+  uint8_t getTemplateCount(void);
   void writePacket(uint32_t addr, uint8_t packettype, uint16_t len, uint8_t *packet);
   uint8_t getReply(uint8_t packet[], uint16_t timeout=DEFAULTTIMEOUT);
 
-  uint16_t fingerID, confidence;
+  uint16_t fingerID, confidence, templateCount;
 
  private: 
   uint32_t thePassword;
