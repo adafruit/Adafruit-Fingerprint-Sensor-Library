@@ -16,9 +16,9 @@
 
 #include <Adafruit_Fingerprint.h>
 #if ARDUINO >= 100
- #include <NewSoftSerial.h>
-#else
  #include <SoftwareSerial.h>
+#else
+ #include <NewSoftSerial.h>
 #endif
 
 uint8_t getFingerprintEnroll(uint8_t id);
