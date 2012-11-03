@@ -46,7 +46,7 @@ boolean Adafruit_Fingerprint::verifyPassword(void) {
   writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 7, packet);
   uint8_t len = getReply(packet);
   
-  if ((len == 1) && (packet[0] = FINGERPRINT_ACKPACKET) && (packet[1] == FINGERPRINT_OK))
+  if ((len == 1) && (packet[0] == FINGERPRINT_ACKPACKET) && (packet[1] == FINGERPRINT_OK))
     return true;
 
 /*
