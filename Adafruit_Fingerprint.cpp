@@ -1,7 +1,7 @@
 /*************************************************** 
   This is a library for our optical Fingerprint sensor
 
-  Designed specifically to work with the Adafruit BMP085 Breakout 
+  Designed specifically to work with the Adafruit Fingerprint sensor 
   ----> http://www.adafruit.com/products/751
 
   These displays use TTL Serial to communicate, 2 pins are required to 

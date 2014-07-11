@@ -1,4 +1,4 @@
-This is a library for our optical Fingerprint sensor
+This is a library for our Optical Fingerprint sensor
 
   Pick one up today in the adafruit shop!
   ------> http://www.adafruit.com/products/751
