@@ -101,6 +101,16 @@ uint8_t Adafruit_Fingerprint::storeModel(uint16_t id) {
   return packet[1];
 }
 
+uint8_t Adafruit_Fingerprint::deleteModel(uint16_t id) {
+    uint8_t packet[] = {FINGERPRINT_DELETE, id >> 8, id & 0xFF, 0x00, 0x01};
+    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+    uint8_t len = getReply(packet);
+        
+    if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
+        return -1;
+    return packet[1];
+}
+
 uint8_t Adafruit_Fingerprint::emptyDatabase(void) {
   uint8_t packet[] = {FINGERPRINT_EMPTY};
   writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
