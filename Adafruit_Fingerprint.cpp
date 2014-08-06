@@ -36,6 +36,8 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(NewSoftSerial *ss) {
 }
 
 void Adafruit_Fingerprint::begin(uint16_t baudrate) {
+  delay(1000);  // one second delay to let the sensor 'boot up'
+
   mySerial->begin(baudrate);
 }
 
