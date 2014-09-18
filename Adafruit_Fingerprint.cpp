@@ -102,7 +102,29 @@ uint8_t Adafruit_Fingerprint::storeModel(uint16_t id) {
    return -1;
   return packet[1];
 }
+    
+//read a fingerprint template from flash into Char Buffer 1
+uint8_t Adafruit_Fingerprint::loadModel(uint16_t id) {
+    uint8_t packet[] = {FINGERPRINT_LOAD, 0x01, id >> 8, id & 0xFF};
+    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+    uint8_t len = getReply(packet);
+    
+    if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
+        return -1;
+    return packet[1];
+}
 
+//transfer a fingerprint template from Char Buffer 1 to host computer
+uint8_t Adafruit_Fingerprint::getModel(void) {
+    uint8_t packet[] = {FINGERPRINT_UPLOAD, 0x01};
+    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+    uint8_t len = getReply(packet);
+    
+    if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
+        return -1;
+    return packet[1];
+}
+    
 uint8_t Adafruit_Fingerprint::deleteModel(uint16_t id) {
     uint8_t packet[] = {FINGERPRINT_DELETE, id >> 8, id & 0xFF, 0x00, 0x01};
     writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
