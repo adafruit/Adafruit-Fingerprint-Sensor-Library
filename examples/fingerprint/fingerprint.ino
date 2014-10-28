@@ -47,6 +47,7 @@ void setup()
 void loop()                     // run over and over again
 {
   getFingerprintIDez();
+  delay(50);            //don't ned to run this at full speed.
 }
 
 uint8_t getFingerprintID() {
