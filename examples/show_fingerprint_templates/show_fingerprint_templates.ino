@@ -24,6 +24,7 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 void setup()  
 {
+  while(!Serial);
   Serial.begin(9600);
   Serial.println("finger template test");
 
@@ -75,13 +76,28 @@ uint8_t uploadFingerpintTemplate(uint16_t id)
       return p;
   }
   
-  //Template data seems to be 78 bytes long?  This prints out 5 lines of 16 bytes (so there's 2 extra FF bytes at the end)
-  for (int count= 0; count < 5; count++)
+  uint8_t templateBuffer[256];
+  memset(templateBuffer, 0xff, 256);  //zero out template buffer
+  int index=0;
+  uint32_t starttime = millis();
+  while ((index < 256) && ((millis() - starttime) < 1000))
+  {
+    if (mySerial.available())
+    {
+      templateBuffer[index] = mySerial.read();
+      index++;
+    }
+  }
+  
+  Serial.print(index); Serial.println(" bytes read");
+  
+  //dump entire templateBuffer.  This prints out 16 lines of 16 bytes
+  for (int count= 0; count < 16; count++)
   {
     for (int i = 0; i < 16; i++)
     {
       Serial.print("0x");
-      Serial.print(mySerial.read(), HEX);
+      Serial.print(templateBuffer[count*16+i], HEX);
       Serial.print(", ");
     }
     Serial.println();
