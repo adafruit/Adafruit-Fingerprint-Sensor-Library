@@ -177,6 +177,7 @@ uint8_t getFingerprintEnroll(uint8_t id) {
     return p;
   }   
   
+  Serial.print("ID "); Serial.println(id);
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
     Serial.println("Stored!");
