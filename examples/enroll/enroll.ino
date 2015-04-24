@@ -17,7 +17,7 @@
 #include <Adafruit_Fingerprint.h>
 #include <SoftwareSerial.h>
 
-uint8_t getFingerprintEnroll(uint8_t id);
+uint8_t getFingerprintEnroll(int id);
 
 
 // pin #2 is IN from sensor (GREEN wire)
@@ -45,7 +45,7 @@ void setup()
 void loop()                     // run over and over again
 {
   Serial.println("Type in the ID # you want to save this finger as...");
-  uint8_t id = 0;
+  int id = 0;
   while (true) {
     while (! Serial.available());
     char c = Serial.read();
@@ -59,8 +59,8 @@ void loop()                     // run over and over again
   while (!  getFingerprintEnroll(id) );
 }
 
-uint8_t getFingerprintEnroll(uint8_t id) {
-  uint8_t p = -1;
+uint8_t getFingerprintEnroll(int id) {
+  int p = -1;
   Serial.println("Waiting for valid finger to enroll");
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
