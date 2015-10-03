@@ -24,7 +24,9 @@
 
 //static SoftwareSerial mySerial = SoftwareSerial(2, 3);
 
-#if ARDUINO >= 100
+#if defined(CORE_TEENSY)
+Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss) {
+#elif ARDUINO >= 100
 Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss) {
 #else
 Adafruit_Fingerprint::Adafruit_Fingerprint(NewSoftSerial *ss) {
