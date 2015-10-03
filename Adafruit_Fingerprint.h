@@ -75,7 +75,9 @@
 
 class Adafruit_Fingerprint {
  public:
-#if ARDUINO >= 100
+#if defined(CORE_TEENSY)
+  Adafruit_Fingerprint(HardwareSerial *);
+#elif ARDUINO >= 100
   Adafruit_Fingerprint(SoftwareSerial *);
 #else
   Adafruit_Fingerprint(NewSoftSerial *);
@@ -102,7 +104,9 @@ class Adafruit_Fingerprint {
  private: 
   uint32_t thePassword;
   uint32_t theAddress;
-#if ARDUINO >= 100
+#if defined(CORE_TEENSY)
+  HardwareSerial *mySerial;
+#elif ARDUINO >= 100
   SoftwareSerial *mySerial;
 #else
   NewSoftSerial *mySerial;
