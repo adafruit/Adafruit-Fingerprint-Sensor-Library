@@ -24,6 +24,7 @@ uint8_t getFingerprintEnroll();
 // Software serial for when you dont have a hardware serial port
 // pin #2 is IN from sensor (GREEN wire)
 // pin #3 is OUT from arduino  (WHITE wire)
+// On Leonardo/Micro/Yun, use pins 8 & 9. On Mega, just grab a hardware serialport 
 //SoftwareSerial mySerial(2, 3);
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
