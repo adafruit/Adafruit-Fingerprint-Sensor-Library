@@ -14,14 +14,8 @@
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-#if (ARDUINO >= 100)
- #include "Arduino.h"
- #include <SoftwareSerial.h>
-#else
- #include "WProgram.h"
- #include <NewSoftSerial.h>
-#endif
-
+#include "Arduino.h"
+#include <SoftwareSerial.h>
 
 #define FINGERPRINT_OK 0x00
 #define FINGERPRINT_PACKETRECIEVEERR 0x01
@@ -75,11 +69,9 @@
 
 class Adafruit_Fingerprint {
  public:
-#if ARDUINO >= 100
   Adafruit_Fingerprint(SoftwareSerial *);
-#else
-  Adafruit_Fingerprint(NewSoftSerial *);
-#endif
+  Adafruit_Fingerprint(HardwareSerial *);
+
   void begin(uint16_t baud);
 
   boolean verifyPassword(void);
@@ -102,9 +94,8 @@ class Adafruit_Fingerprint {
  private: 
   uint32_t thePassword;
   uint32_t theAddress;
-#if ARDUINO >= 100
-  SoftwareSerial *mySerial;
-#else
-  NewSoftSerial *mySerial;
-#endif
+
+  Stream *mySerial;
+  SoftwareSerial *swSerial;
+  HardwareSerial *hwSerial;
 };

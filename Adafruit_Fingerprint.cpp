@@ -16,29 +16,31 @@
 
 #include "Adafruit_Fingerprint.h"
 #include <util/delay.h>
-#if (ARDUINO >= 100)
-  #include <SoftwareSerial.h>
-#else
-  #include <NewSoftSerial.h>
-#endif
+#include <SoftwareSerial.h>
 
-//static SoftwareSerial mySerial = SoftwareSerial(2, 3);
-
-#if ARDUINO >= 100
 Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss) {
-#else
-Adafruit_Fingerprint::Adafruit_Fingerprint(NewSoftSerial *ss) {
-#endif
   thePassword = 0;
   theAddress = 0xFFFFFFFF;
 
-  mySerial = ss;
+  hwSerial = NULL;
+  swSerial = ss;
+  mySerial = swSerial;
+}
+
+Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss) {
+  thePassword = 0;
+  theAddress = 0xFFFFFFFF;
+
+  swSerial = NULL;
+  hwSerial = ss;
+  mySerial = hwSerial;
 }
 
 void Adafruit_Fingerprint::begin(uint16_t baudrate) {
   delay(1000);  // one second delay to let the sensor 'boot up'
 
-  mySerial->begin(baudrate);
+  if (hwSerial) hwSerial->begin(baudrate);
+  if (swSerial) swSerial->begin(baudrate);
 }
 
 boolean Adafruit_Fingerprint::verifyPassword(void) {

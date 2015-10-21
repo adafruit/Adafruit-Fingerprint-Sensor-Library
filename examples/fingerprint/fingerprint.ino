@@ -23,14 +23,17 @@ int getFingerprintIDez();
 // pin #2 is IN from sensor (GREEN wire)
 // pin #3 is OUT from arduino  (WHITE wire)
 SoftwareSerial mySerial(2, 3);
+//Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
-
-Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
+// On Leonardo/Micro or others with hardware serial, use those! #0 is green wire, #1 is white
+//Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial1);
 
 void setup()  
 {
+  while (!Serial);  // For Yun/Leo/Micro/Zero/...
+  
   Serial.begin(9600);
-  Serial.println("fingertest");
+  Serial.println("Adafruit finger detect test");
 
   // set the data rate for the sensor serial port
   finger.begin(57600);

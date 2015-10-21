@@ -19,15 +19,21 @@
 
 uint8_t getFingerprintEnroll(uint8_t id);
 
-
+// Software serial for when you dont have a hardware serial port
 // pin #2 is IN from sensor (GREEN wire)
 // pin #3 is OUT from arduino  (WHITE wire)
-SoftwareSerial mySerial(2, 3);
-
+//SoftwareSerial mySerial(2, 3);
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
+
+// On Leonardo/Micro or others with hardware serial, use those! #0 is green wire, #1 is white
+//Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial1);
+
 
 void setup()  
 {
+  while (!Serial);  // For Yun/Leo/Micro/Zero/...
+  delay(500);
+  
   Serial.begin(9600);
   Serial.println("Adafruit Fingerprint sensor enrollment");
 
