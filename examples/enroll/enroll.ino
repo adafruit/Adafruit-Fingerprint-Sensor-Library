@@ -17,7 +17,7 @@
 #include <Adafruit_Fingerprint.h>
 #include <SoftwareSerial.h>
 
-uint8_t getFingerprintEnroll(int id);
+uint8_t getFingerprintEnroll(uint8_t id);
 
 
 // pin #2 is IN from sensor (GREEN wire)
@@ -29,7 +29,7 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 void setup()  
 {
   Serial.begin(9600);
-  Serial.println("fingertest");
+  Serial.println("Adafruit Fingerprint sensor enrollment");
 
   // set the data rate for the sensor serial port
   finger.begin(57600);
@@ -42,24 +42,34 @@ void setup()
   }
 }
 
-void loop()                     // run over and over again
-{
-  Serial.println("Type in the ID # you want to save this finger as...");
-  int id = 0;
-  while (true) {
+uint8_t readnumber(void) {
+  uint8_t num = 0;
+  boolean validnum = false; 
+  while (1) {
     while (! Serial.available());
     char c = Serial.read();
-    if (! isdigit(c)) break;
-    id *= 10;
-    id += c - '0';
+    if (isdigit(c)) {
+       num *= 10;
+       num += c - '0';
+       validnum = true;
+    } else if (validnum) {
+      return num;
+    }
   }
+}
+
+void loop()                     // run over and over again
+{
+  Serial.println("Ready to enroll a fingerprint! Please Type in the ID # you want to save this finger as...");
+  int id = readnumber();
   Serial.print("Enrolling ID #");
   Serial.println(id);
   
   while (!  getFingerprintEnroll(id) );
 }
 
-uint8_t getFingerprintEnroll(int id) {
+uint8_t getFingerprintEnroll(uint8_t id) {
+
   int p = -1;
   Serial.println("Waiting for valid finger to enroll");
   while (p != FINGERPRINT_OK) {
@@ -113,7 +123,7 @@ uint8_t getFingerprintEnroll(int id) {
   while (p != FINGERPRINT_NOFINGER) {
     p = finger.getImage();
   }
-
+  Serial.print("ID "); Serial.println(id);
   p = -1;
   Serial.println("Place same finger again");
   while (p != FINGERPRINT_OK) {
@@ -160,7 +170,6 @@ uint8_t getFingerprintEnroll(int id) {
       Serial.println("Unknown error");
       return p;
   }
-  
   
   // OK converted!
   p = finger.createModel();
