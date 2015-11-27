@@ -14,8 +14,6 @@
 #include <Adafruit_Fingerprint.h>
 #include <SoftwareSerial.h>
 
-uint8_t getFingerprintEnroll(uint8_t id);
-
 // Software serial for when you dont have a hardware serial port
 // pin #2 is IN from sensor (GREEN wire)
 // pin #3 is OUT from arduino  (WHITE wire)
@@ -29,7 +27,7 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 void setup()  
 {
   Serial.begin(9600);
-  Serial.println("Delete Finger");
+  Serial.println("Delete all templates");
 
   // set the data rate for the sensor serial port
   finger.begin(57600);
