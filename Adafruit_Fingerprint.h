@@ -58,6 +58,7 @@
 #define FINGERPRINT_UPLOAD 0x08
 #define FINGERPRINT_DELETE 0x0C
 #define FINGERPRINT_EMPTY 0x0D
+#define FINGERPRINT_SETPASSWORD 0x12
 #define FINGERPRINT_VERIFYPASSWORD 0x13
 #define FINGERPRINT_HISPEEDSEARCH 0x1B
 #define FINGERPRINT_TEMPLATECOUNT 0x1D
@@ -71,6 +72,8 @@ class Adafruit_Fingerprint {
  public:
   Adafruit_Fingerprint(SoftwareSerial *);
   Adafruit_Fingerprint(HardwareSerial *);
+  Adafruit_Fingerprint(SoftwareSerial *, uint32_t password);
+  Adafruit_Fingerprint(HardwareSerial *, uint32_t password);
 
   void begin(uint16_t baud);
 
@@ -86,6 +89,7 @@ class Adafruit_Fingerprint {
   uint8_t deleteModel(uint16_t id);
   uint8_t fingerFastSearch(void);
   uint8_t getTemplateCount(void);
+  uint8_t setPassword(uint32_t password);
   void writePacket(uint32_t addr, uint8_t packettype, uint16_t len, uint8_t *packet);
   uint8_t getReply(uint8_t packet[], uint16_t timeout=DEFAULTTIMEOUT);
 
