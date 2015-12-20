@@ -27,8 +27,26 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss) {
   mySerial = swSerial;
 }
 
+Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss, uint32_t password) {
+  thePassword = password;
+  theAddress = 0xFFFFFFFF;
+
+  hwSerial = NULL;
+  swSerial = ss;
+  mySerial = swSerial;
+}
+
 Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss) {
   thePassword = 0;
+  theAddress = 0xFFFFFFFF;
+
+  swSerial = NULL;
+  hwSerial = ss;
+  mySerial = hwSerial;
+}
+
+Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss, uint32_t password) {
+  thePassword = password;
   theAddress = 0xFFFFFFFF;
 
   swSerial = NULL;
@@ -183,6 +201,18 @@ uint8_t Adafruit_Fingerprint::getTemplateCount(void) {
   templateCount <<= 8;
   templateCount |= packet[3];
   
+  return packet[1];
+}
+
+uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
+  uint8_t packet[] = {FINGERPRINT_SETPASSWORD, 
+                      (password >> 24), (password >> 16),
+                      (password >> 8), password};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t len = getReply(packet);
+  
+  if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
+   return -1;
   return packet[1];
 }
 
