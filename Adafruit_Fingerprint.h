@@ -1,26 +1,21 @@
-#ifndef ADAFRUIT_FINGERPRINT_H
-#define ADAFRUIT_FINGERPRINT_H
-
-/***************************************************
+/*************************************************** 
   This is a library for our optical Fingerprint sensor
 
   Designed specifically to work with the Adafruit Fingerprint sensor
   ----> http://www.adafruit.com/products/751
 
-  These displays use TTL Serial to communicate, 2 pins are required to
+  These displays use TTL Serial to communicate, 2 pins are required to 
   interface
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
+  Adafruit invests time and resources providing this open source code, 
+  please support Adafruit and open-source hardware by purchasing 
   products from Adafruit!
 
-  Written by Limor Fried/Ladyada for Adafruit Industries.
+  Written by Limor Fried/Ladyada for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
 #include "Arduino.h"
-#if defined(__AVR__) || defined(ESP8266)
-  #include <SoftwareSerial.h>
-#endif
+#include <SoftwareSerial.h>
 
 #define FINGERPRINT_OK 0x00
 #define FINGERPRINT_PACKETRECIEVEERR 0x01
@@ -63,39 +58,22 @@
 #define FINGERPRINT_UPLOAD 0x08
 #define FINGERPRINT_DELETE 0x0C
 #define FINGERPRINT_EMPTY 0x0D
+#define FINGERPRINT_SETPASSWORD 0x12
 #define FINGERPRINT_VERIFYPASSWORD 0x13
 #define FINGERPRINT_HISPEEDSEARCH 0x1B
 #define FINGERPRINT_TEMPLATECOUNT 0x1D
 
-//#define FINGERPRINT_DEBUG
+//#define FINGERPRINT_DEBUG 
 
 #define DEFAULTTIMEOUT 5000  // milliseconds
 
-struct Adafruit_Fingerprint_Packet {
-  Adafruit_Fingerprint_Packet(uint8_t type, uint16_t length, uint8_t * data) {
-    this->start_code = FINGERPRINT_STARTCODE;
-    this->type = type;
-    this->length = length;
-    address[0] = 0xFF; address[1] = 0xFF;
-    address[2] = 0xFF; address[3] = 0xFF;
-    if(length<64)
-      memcpy(this->data, data, length);
-    else
-      memcpy(this->data, data, 64);
-  }
-  uint16_t start_code;
-  uint8_t address[4];
-  uint8_t type;
-  uint16_t length;
-  uint8_t data[64];
-};
 
 class Adafruit_Fingerprint {
  public:
-#if defined(__AVR__) || defined(ESP8266)
   Adafruit_Fingerprint(SoftwareSerial *);
-#endif
   Adafruit_Fingerprint(HardwareSerial *);
+  Adafruit_Fingerprint(SoftwareSerial *, uint32_t password);
+  Adafruit_Fingerprint(HardwareSerial *, uint32_t password);
 
   void begin(uint16_t baud);
 
@@ -111,21 +89,17 @@ class Adafruit_Fingerprint {
   uint8_t deleteModel(uint16_t id);
   uint8_t fingerFastSearch(void);
   uint8_t getTemplateCount(void);
-  void writeStructuredPacket(const Adafruit_Fingerprint_Packet & p);
-  uint8_t getStructuredPacket(Adafruit_Fingerprint_Packet * p, uint16_t timeout=DEFAULTTIMEOUT);
+  uint8_t setPassword(uint32_t password);
+  void writePacket(uint32_t addr, uint8_t packettype, uint16_t len, uint8_t *packet);
+  uint8_t getReply(uint8_t packet[], uint16_t timeout=DEFAULTTIMEOUT);
 
   uint16_t fingerID, confidence, templateCount;
 
- private:
+ private: 
   uint32_t thePassword;
   uint32_t theAddress;
-    uint8_t recvPacket[20];
 
   Stream *mySerial;
-#if defined(__AVR__) || defined(ESP8266)
   SoftwareSerial *swSerial;
-#endif
   HardwareSerial *hwSerial;
 };
-
-#endif
