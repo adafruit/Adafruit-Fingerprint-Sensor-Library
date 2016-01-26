@@ -15,7 +15,9 @@
  ****************************************************/
 
 #include "Arduino.h"
-#include <SoftwareSerial.h>
+#ifdef __AVR__
+  #include <SoftwareSerial.h>
+#endif
 
 #define FINGERPRINT_OK 0x00
 #define FINGERPRINT_PACKETRECIEVEERR 0x01
@@ -69,7 +71,9 @@
 
 class Adafruit_Fingerprint {
  public:
+#ifdef __AVR__
   Adafruit_Fingerprint(SoftwareSerial *);
+#endif
   Adafruit_Fingerprint(HardwareSerial *);
 
   void begin(uint16_t baud);
@@ -96,6 +100,8 @@ class Adafruit_Fingerprint {
   uint32_t theAddress;
 
   Stream *mySerial;
+#ifdef __AVR__
   SoftwareSerial *swSerial;
+#endif
   HardwareSerial *hwSerial;
 };
