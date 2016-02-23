@@ -51,20 +51,12 @@ void setup()
   }
 }
 
-uint8_t readnumber(void) {
+uint8_t readnumber(void)
+{
   uint8_t num = 0;
-  boolean validnum = false; 
-  while (1) {
-    while (! Serial.available());
-    char c = Serial.read();
-    if (isdigit(c)) {
-       num *= 10;
-       num += c - '0';
-       validnum = true;
-    } else if (validnum) {
-      return num;
-    }
-  }
+  while (Serial.available()==0);
+  num = Serial.parseInt();
+  return num;
 }
 
 void loop()                     // run over and over again
