@@ -1,3 +1,6 @@
+#ifndef ADAFRUIT_FINGERPRINT_H
+#define ADAFRUIT_FINGERPRINT_H
+
 /***************************************************
   This is a library for our optical Fingerprint sensor
 
@@ -105,3 +108,5 @@ class Adafruit_Fingerprint {
 #endif
   HardwareSerial *hwSerial;
 };
+
+#endif
