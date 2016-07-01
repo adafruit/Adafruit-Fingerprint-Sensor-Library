@@ -72,8 +72,12 @@
 #define DEFAULTTIMEOUT 5000  // milliseconds
 
 struct Adafruit_Fingerprint_Packet {
-  Adafruit_Fingerprint_Packet(uint8_t type, uint16_t length, uint8_t * data) : start_code(FINGERPRINT_STARTCODE), type(type), length(length) {
-    memset(address, 0xFF, 4);
+  Adafruit_Fingerprint_Packet(uint8_t type, uint16_t length, uint8_t * data) {
+    this->start_code = FINGERPRINT_STARTCODE;
+    this->type = type;
+    this->length = length;
+    address[0] = 0xFF; address[1] = 0xFF;
+    address[2] = 0xFF; address[3] = 0xFF;
     if(length<64)
       memcpy(this->data, data, length);
     else
@@ -107,10 +111,8 @@ class Adafruit_Fingerprint {
   uint8_t deleteModel(uint16_t id);
   uint8_t fingerFastSearch(void);
   uint8_t getTemplateCount(void);
-  uint8_t writeStructuredPacket(const Adafruit_Fingerprint_Packet & p);
+  void writeStructuredPacket(const Adafruit_Fingerprint_Packet & p);
   uint8_t getStructuredPacket(Adafruit_Fingerprint_Packet * p, uint16_t timeout=DEFAULTTIMEOUT);
-  void writePacket(uint32_t addr, uint8_t packettype, uint16_t len, uint8_t *packet);
-  uint8_t getReply(uint8_t packet[], uint16_t timeout=DEFAULTTIMEOUT);
 
   uint16_t fingerID, confidence, templateCount;
 
