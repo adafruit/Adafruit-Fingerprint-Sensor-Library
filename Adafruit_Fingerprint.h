@@ -1,16 +1,16 @@
-/*************************************************** 
+/***************************************************
   This is a library for our optical Fingerprint sensor
 
   Designed specifically to work with the Adafruit Fingerprint sensor
   ----> http://www.adafruit.com/products/751
 
-  These displays use TTL Serial to communicate, 2 pins are required to 
+  These displays use TTL Serial to communicate, 2 pins are required to
   interface
-  Adafruit invests time and resources providing this open source code, 
-  please support Adafruit and open-source hardware by purchasing 
+  Adafruit invests time and resources providing this open source code,
+  please support Adafruit and open-source hardware by purchasing
   products from Adafruit!
 
-  Written by Limor Fried/Ladyada for Adafruit Industries.  
+  Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
@@ -64,7 +64,7 @@
 #define FINGERPRINT_HISPEEDSEARCH 0x1B
 #define FINGERPRINT_TEMPLATECOUNT 0x1D
 
-//#define FINGERPRINT_DEBUG 
+//#define FINGERPRINT_DEBUG
 
 #define DEFAULTTIMEOUT 5000  // milliseconds
 
@@ -95,9 +95,10 @@ class Adafruit_Fingerprint {
 
   uint16_t fingerID, confidence, templateCount;
 
- private: 
+ private:
   uint32_t thePassword;
   uint32_t theAddress;
+  uint8_t packet[10];
 
   Stream *mySerial;
 #ifdef __AVR__
