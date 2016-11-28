@@ -52,7 +52,7 @@ void Adafruit_Fingerprint::begin(uint16_t baudrate) {
 }
 
 boolean Adafruit_Fingerprint::verifyPassword(void) {
-  uint8_t packet[] = {FINGERPRINT_VERIFYPASSWORD, 
+  uint8_t packet[5] = {FINGERPRINT_VERIFYPASSWORD, 
                       (thePassword >> 24), (thePassword >> 16),
                       (thePassword >> 8), thePassword};
   writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 7, packet);
@@ -72,7 +72,7 @@ boolean Adafruit_Fingerprint::verifyPassword(void) {
 }
 
 uint8_t Adafruit_Fingerprint::getImage(void) {
-  uint8_t packet[] = {FINGERPRINT_GETIMAGE};
+  uint8_t packet[2] = {FINGERPRINT_GETIMAGE};
   writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 3, packet);
   uint8_t len = getReply(packet);
   
@@ -82,8 +82,8 @@ uint8_t Adafruit_Fingerprint::getImage(void) {
 }
 
 uint8_t Adafruit_Fingerprint::image2Tz(uint8_t slot) {
-  uint8_t packet[] = {FINGERPRINT_IMAGE2TZ, slot};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t packet[2] = {FINGERPRINT_IMAGE2TZ, slot};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 4, packet);
   uint8_t len = getReply(packet);
   
   if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
@@ -93,8 +93,8 @@ uint8_t Adafruit_Fingerprint::image2Tz(uint8_t slot) {
 
 
 uint8_t Adafruit_Fingerprint::createModel(void) {
-  uint8_t packet[] = {FINGERPRINT_REGMODEL};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t packet[2] = {FINGERPRINT_REGMODEL};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 3, packet);
   uint8_t len = getReply(packet);
   
   if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
@@ -104,8 +104,8 @@ uint8_t Adafruit_Fingerprint::createModel(void) {
 
 
 uint8_t Adafruit_Fingerprint::storeModel(uint16_t id) {
-  uint8_t packet[] = {FINGERPRINT_STORE, 0x01, id >> 8, id & 0xFF};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t packet[4] = {FINGERPRINT_STORE, 0x01, id >> 8, id & 0xFF};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 6, packet);
   uint8_t len = getReply(packet);
   
   if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
@@ -115,8 +115,8 @@ uint8_t Adafruit_Fingerprint::storeModel(uint16_t id) {
     
 //read a fingerprint template from flash into Char Buffer 1
 uint8_t Adafruit_Fingerprint::loadModel(uint16_t id) {
-    uint8_t packet[] = {FINGERPRINT_LOAD, 0x01, id >> 8, id & 0xFF};
-    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+    uint8_t packet[4] = {FINGERPRINT_LOAD, 0x01, id >> 8, id & 0xFF};
+    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 6, packet);
     uint8_t len = getReply(packet);
     
     if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
@@ -126,8 +126,8 @@ uint8_t Adafruit_Fingerprint::loadModel(uint16_t id) {
 
 //transfer a fingerprint template from Char Buffer 1 to host computer
 uint8_t Adafruit_Fingerprint::getModel(void) {
-    uint8_t packet[] = {FINGERPRINT_UPLOAD, 0x01};
-    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+    uint8_t packet[2] = {FINGERPRINT_UPLOAD, 0x01};
+    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 4, packet);
     uint8_t len = getReply(packet);
     
     if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
@@ -136,8 +136,8 @@ uint8_t Adafruit_Fingerprint::getModel(void) {
 }
     
 uint8_t Adafruit_Fingerprint::deleteModel(uint16_t id) {
-    uint8_t packet[] = {FINGERPRINT_DELETE, id >> 8, id & 0xFF, 0x00, 0x01};
-    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+    uint8_t packet[5] = {FINGERPRINT_DELETE, id >> 8, id & 0xFF, 0x00, 0x01};
+    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 7, packet);
     uint8_t len = getReply(packet);
         
     if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
@@ -146,8 +146,8 @@ uint8_t Adafruit_Fingerprint::deleteModel(uint16_t id) {
 }
 
 uint8_t Adafruit_Fingerprint::emptyDatabase(void) {
-  uint8_t packet[] = {FINGERPRINT_EMPTY};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t packet[2] = {FINGERPRINT_EMPTY};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 3, packet);
   uint8_t len = getReply(packet);
   
   if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
@@ -159,8 +159,8 @@ uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   fingerID = 0xFFFF;
   confidence = 0xFFFF;
   // high speed search of slot #1 starting at page 0x0000 and page #0x00A3 
-  uint8_t packet[] = {FINGERPRINT_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t packet[6] = {FINGERPRINT_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 8, packet);
   uint8_t len = getReply(packet);
   
   if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
@@ -180,8 +180,8 @@ uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
 uint8_t Adafruit_Fingerprint::getTemplateCount(void) {
   templateCount = 0xFFFF;
   // get number of templates in memory
-  uint8_t packet[] = {FINGERPRINT_TEMPLATECOUNT};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
+  uint8_t packet[4] = {FINGERPRINT_TEMPLATECOUNT};
+  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 3, packet);
   uint8_t len = getReply(packet);
   
   if ((len != 1) && (packet[0] != FINGERPRINT_ACKPACKET))
