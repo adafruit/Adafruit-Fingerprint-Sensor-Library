@@ -14,7 +14,7 @@
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-#include "Fingerprint.h"
+#include "Adafruit_Fingerprint.h"
 
 #ifdef __AVR__
     #include <util/delay.h>
