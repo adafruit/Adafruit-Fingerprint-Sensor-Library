@@ -75,7 +75,8 @@ class Adafruit_Fingerprint {
   Adafruit_Fingerprint(SoftwareSerial *);
 #endif
   Adafruit_Fingerprint(HardwareSerial *);
-
+  uint8_t packetBuffer[64];
+  
   void begin(uint16_t baud);
 
   boolean verifyPassword(void);
