@@ -98,6 +98,7 @@ class Adafruit_Fingerprint {
  private: 
   uint32_t thePassword;
   uint32_t theAddress;
+    uint8_t recvPacket[20];
 
   Stream *mySerial;
 #ifdef __AVR__
