@@ -32,7 +32,7 @@ void setup()
   while (!Serial);  // For Yun/Leo/Micro/Zero/...
   
   Serial.begin(9600);
-  Serial.println("Adafruit finger detect test");
+  Serial.println("Adafruit fingerprint sensor, change password example");
 
   // set the data rate for the sensor serial port
   finger.begin(19200);
