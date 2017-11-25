@@ -32,10 +32,10 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 void setup()  
 {
-  while (!Serial);  // For Yun/Leo/Micro/Zero/...
-  
   Serial.begin(9600);
-  Serial.println("Adafruit finger detect test");
+  while (!Serial);  // For Yun/Leo/Micro/Zero/...
+  delay(100);
+  Serial.println("\n\nAdafruit finger detect test");
 
   // set the data rate for the sensor serial port
   finger.begin(57600);
@@ -44,7 +44,7 @@ void setup()
     Serial.println("Found fingerprint sensor!");
   } else {
     Serial.println("Did not find fingerprint sensor :(");
-    while (1);
+    while (1) { delay(1); }
   }
   Serial.println("Waiting for valid finger...");
 }

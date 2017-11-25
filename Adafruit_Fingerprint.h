@@ -15,7 +15,7 @@
  ****************************************************/
 
 #include "Arduino.h"
-#ifdef __AVR__
+#if defined(__AVR__) || defined(ESP8266)
   #include <SoftwareSerial.h>
 #endif
 
@@ -71,7 +71,7 @@
 
 class Adafruit_Fingerprint {
  public:
-#ifdef __AVR__
+#if defined(__AVR__) || defined(ESP8266)
   Adafruit_Fingerprint(SoftwareSerial *);
 #endif
   Adafruit_Fingerprint(HardwareSerial *);
@@ -101,7 +101,7 @@ class Adafruit_Fingerprint {
     uint8_t recvPacket[20];
 
   Stream *mySerial;
-#ifdef __AVR__
+#if defined(__AVR__) || defined(ESP8266)
   SoftwareSerial *swSerial;
 #endif
   HardwareSerial *hwSerial;
