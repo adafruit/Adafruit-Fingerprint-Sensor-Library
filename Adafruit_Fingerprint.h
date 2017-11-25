@@ -14,6 +14,9 @@
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
+#ifndef ADAFRUITFINGERPRINT_H_
+#define ADAFRUITFINGERPRINT_H_
+ 
 #include "Arduino.h"
 #include <SoftwareSerial.h>
 
@@ -103,3 +106,5 @@ class Adafruit_Fingerprint {
   SoftwareSerial *swSerial;
   HardwareSerial *hwSerial;
 };
+
+#endif /* ADAFRUITFINGERPRINT_H_ */
