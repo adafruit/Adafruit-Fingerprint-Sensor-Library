@@ -18,7 +18,9 @@
 #define ADAFRUITFINGERPRINT_H_
  
 #include "Arduino.h"
-#include <SoftwareSerial.h>
+#ifndef _DISABLE_SOFTSERIAL_ // You should append "-D_DISABLE_SOFTSERIAL_" to the build command to disable SoftwareSerial for a project
+	#include <SoftwareSerial.h>
+#endif
 
 #define FINGERPRINT_OK 0x00
 #define FINGERPRINT_PACKETRECIEVEERR 0x01
@@ -73,9 +75,12 @@
 
 class Adafruit_Fingerprint {
  public:
+#ifndef _DISABLE_SOFTSERIAL_
   Adafruit_Fingerprint(SoftwareSerial *);
-  Adafruit_Fingerprint(HardwareSerial *);
   Adafruit_Fingerprint(SoftwareSerial *, uint32_t password);
+#endif
+  Adafruit_Fingerprint(HardwareSerial *);
+  
   Adafruit_Fingerprint(HardwareSerial *, uint32_t password);
 
   void begin(uint16_t baud);
@@ -103,7 +108,11 @@ class Adafruit_Fingerprint {
   uint32_t theAddress;
 
   Stream *mySerial;
+#ifndef _DISABLE_SOFTSERIAL_
   SoftwareSerial *swSerial;
+#else
+  nullptr_t swSerial;
+#endif
   HardwareSerial *hwSerial;
 };
 
