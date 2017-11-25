@@ -18,6 +18,7 @@
 #ifdef __avr__
 	#include <util/delay.h>
 #endif
+#ifndef _DISABLE_SOFTSERIAL_
 #include <SoftwareSerial.h>
 
 Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss) {
@@ -37,6 +38,7 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss, uint32_t password
   swSerial = ss;
   mySerial = swSerial;
 }
+#endif /* _DISABLE_SOFTSERIAL_ */
 
 Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss) {
   thePassword = 0;
@@ -60,7 +62,9 @@ void Adafruit_Fingerprint::begin(uint16_t baudrate) {
   delay(1000);  // one second delay to let the sensor 'boot up'
 
   if (hwSerial) hwSerial->begin(baudrate);
+#ifndef _DISABLE_SOFTSERIAL_
   if (swSerial) swSerial->begin(baudrate);
+#endif
 }
 
 boolean Adafruit_Fingerprint::verifyPassword(void) {
