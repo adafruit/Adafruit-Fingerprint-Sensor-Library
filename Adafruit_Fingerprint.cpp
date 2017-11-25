@@ -1,16 +1,16 @@
-/*************************************************** 
+/***************************************************
   This is a library for our optical Fingerprint sensor
 
-  Designed specifically to work with the Adafruit Fingerprint sensor 
+  Designed specifically to work with the Adafruit Fingerprint sensor
   ----> http://www.adafruit.com/products/751
 
-  These displays use TTL Serial to communicate, 2 pins are required to 
+  These displays use TTL Serial to communicate, 2 pins are required to
   interface
-  Adafruit invests time and resources providing this open source code, 
-  please support Adafruit and open-source hardware by purchasing 
+  Adafruit invests time and resources providing this open source code,
+  please support Adafruit and open-source hardware by purchasing
   products from Adafruit!
 
-  Written by Limor Fried/Ladyada for Adafruit Industries.  
+  Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
@@ -53,268 +53,144 @@ void Adafruit_Fingerprint::begin(uint16_t baudrate) {
 #endif
 }
 
-boolean Adafruit_Fingerprint::verifyPassword(void) {
-  uint8_t packet[] = {FINGERPRINT_VERIFYPASSWORD, 
-                      (thePassword >> 24), (thePassword >> 16),
-                      (thePassword >> 8), thePassword};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 7, packet);
-  uint8_t len = getReply(recvPacket);
-  
-  if ((len == 1) && (recvPacket[0] == FINGERPRINT_ACKPACKET) && (recvPacket[1] == FINGERPRINT_OK))
-    return true;
+#define GET_CMD_PACKET(...) \
+  uint8_t data[] = {__VA_ARGS__}; \
+  Adafruit_Fingerprint_Packet packet(FINGERPRINT_COMMANDPACKET, sizeof(data), data); \
+  writeStructuredPacket(packet); \
+  if( getStructuredPacket(&packet) != FINGERPRINT_OK || packet.type != FINGERPRINT_ACKPACKET ) { return FINGERPRINT_PACKETRECIEVEERR; }
 
-/*
-  Serial.print("\nGot packet type "); Serial.print(packet[0]);
-  for (uint8_t i=1; i<len+1;i++) {
-    Serial.print(" 0x");
-    Serial.print(packet[i], HEX);
-  }
-  */
-  return false;
+#define SEND_CMD_PACKET(...) GET_CMD_PACKET(__VA_ARGS__); return packet.data[0];
+
+boolean Adafruit_Fingerprint::verifyPassword(void) {
+  GET_CMD_PACKET(FINGERPRINT_VERIFYPASSWORD,
+                  (uint8_t)(thePassword >> 24), (uint8_t)(thePassword >> 16),
+                  (uint8_t)(thePassword >> 8), (uint8_t)(thePassword & 0xFF));
+  return packet.data[0] == FINGERPRINT_OK;
 }
 
 uint8_t Adafruit_Fingerprint::getImage(void) {
-  uint8_t packet[] = {FINGERPRINT_GETIMAGE};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, 3, packet);
-  uint8_t len = getReply(recvPacket);
-  
-  if ((len != 1) && (recvPacket[0] != FINGERPRINT_ACKPACKET))
-   return -1;
-  return recvPacket[1];
+  SEND_CMD_PACKET(FINGERPRINT_GETIMAGE);
 }
 
 uint8_t Adafruit_Fingerprint::image2Tz(uint8_t slot) {
-  uint8_t packet[] = {FINGERPRINT_IMAGE2TZ, slot};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
-  uint8_t len = getReply(recvPacket);
-  
-  if ((len != 1) && (recvPacket[0] != FINGERPRINT_ACKPACKET))
-   return -1;
-  return recvPacket[1];
+  SEND_CMD_PACKET(FINGERPRINT_IMAGE2TZ,slot);
 }
-
 
 uint8_t Adafruit_Fingerprint::createModel(void) {
-  uint8_t packet[] = {FINGERPRINT_REGMODEL};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
-  uint8_t len = getReply(recvPacket);
-  
-  if ((len != 1) && (recvPacket[0] != FINGERPRINT_ACKPACKET))
-   return -1;
-  return recvPacket[1];
+  SEND_CMD_PACKET(FINGERPRINT_REGMODEL);
 }
-
 
 uint8_t Adafruit_Fingerprint::storeModel(uint16_t id) {
-  uint8_t packet[] = {FINGERPRINT_STORE, 0x01, id >> 8, id & 0xFF};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
-  uint8_t len = getReply(recvPacket);
-  
-  if ((len != 1) && (recvPacket[0] != FINGERPRINT_ACKPACKET))
-   return -1;
-  return recvPacket[1];
+  SEND_CMD_PACKET(FINGERPRINT_STORE, 0x01, (uint8_t)(id >> 8), (uint8_t)(id & 0xFF));
 }
-    
+
 //read a fingerprint template from flash into Char Buffer 1
 uint8_t Adafruit_Fingerprint::loadModel(uint16_t id) {
-    uint8_t packet[] = {FINGERPRINT_LOAD, 0x01, id >> 8, id & 0xFF};
-    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
-    uint8_t len = getReply(recvPacket);
-    
-    if ((len != 1) && (recvPacket[0] != FINGERPRINT_ACKPACKET))
-        return -1;
-    return recvPacket[1];
+  SEND_CMD_PACKET(FINGERPRINT_LOAD, 0x01, (uint8_t)(id >> 8), (uint8_t)(id & 0xFF));
 }
 
 //transfer a fingerprint template from Char Buffer 1 to host computer
 uint8_t Adafruit_Fingerprint::getModel(void) {
-    uint8_t packet[] = {FINGERPRINT_UPLOAD, 0x01};
-    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
-    uint8_t len = getReply(recvPacket);
-    
-    if ((len != 1) && (recvPacket[0] != FINGERPRINT_ACKPACKET))
-        return -1;
-    return recvPacket[1];
+  SEND_CMD_PACKET(FINGERPRINT_UPLOAD, 0x01);
 }
-    
+
 uint8_t Adafruit_Fingerprint::deleteModel(uint16_t id) {
-    uint8_t packet[] = {FINGERPRINT_DELETE, id >> 8, id & 0xFF, 0x00, 0x01};
-    writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
-    uint8_t len = getReply(recvPacket);
-        
-    if ((len != 1) && (recvPacket[0] != FINGERPRINT_ACKPACKET))
-        return -1;
-    return recvPacket[1];
+  SEND_CMD_PACKET(FINGERPRINT_DELETE, (uint8_t)(id>>8), (uint8_t)(id & 0xFF), 0x00, 0x01);
 }
 
 uint8_t Adafruit_Fingerprint::emptyDatabase(void) {
-  uint8_t packet[] = {FINGERPRINT_EMPTY};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
-  uint8_t len = getReply(recvPacket);
-  
-  if ((len != 1) && (recvPacket[0] != FINGERPRINT_ACKPACKET))
-   return -1;
-  return recvPacket[1];
+  SEND_CMD_PACKET(FINGERPRINT_EMPTY);
 }
 
 uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
+  // high speed search of slot #1 starting at page 0x0000 and page #0x00A3
+  GET_CMD_PACKET(FINGERPRINT_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3);
   fingerID = 0xFFFF;
   confidence = 0xFFFF;
-  // high speed search of slot #1 starting at page 0x0000 and page #0x00A3 
-  uint8_t packet[] = {FINGERPRINT_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
-  uint8_t len = getReply(recvPacket);
-  
-  if ((len != 1) && (recvPacket[0] != FINGERPRINT_ACKPACKET))
-   return -1;
 
-  fingerID = recvPacket[2];
+  fingerID = packet.data[1];
   fingerID <<= 8;
-  fingerID |= recvPacket[3];
-  
-  confidence = recvPacket[4];
+  fingerID |= packet.data[2];
+
+  confidence = packet.data[3];
   confidence <<= 8;
-  confidence |= recvPacket[5];
-  
-  return recvPacket[1];
+  confidence |= packet.data[4];
+
+  return packet.data[0];
 }
 
 uint8_t Adafruit_Fingerprint::getTemplateCount(void) {
-  templateCount = 0xFFFF;
-  // get number of templates in memory
-  uint8_t packet[] = {FINGERPRINT_TEMPLATECOUNT};
-  writePacket(theAddress, FINGERPRINT_COMMANDPACKET, sizeof(packet)+2, packet);
-  uint8_t len = getReply(recvPacket);
-  
-  if ((len != 1) && (recvPacket[0] != FINGERPRINT_ACKPACKET))
-   return -1;
+  GET_CMD_PACKET(FINGERPRINT_TEMPLATECOUNT);
 
-  templateCount = recvPacket[2];
+  templateCount = packet.data[1];
   templateCount <<= 8;
-  templateCount |= recvPacket[3];
-  
-  return recvPacket[1];
+  templateCount |= packet.data[2];
+
+  return packet.data[0];
 }
 
-
-
-void Adafruit_Fingerprint::writePacket(uint32_t addr, uint8_t packettype, 
-				       uint16_t len, uint8_t *packet) {
-#ifdef FINGERPRINT_DEBUG
-  Serial.print("---> 0x");
-  Serial.print((uint8_t)(FINGERPRINT_STARTCODE >> 8), HEX);
-  Serial.print(" 0x");
-  Serial.print((uint8_t)FINGERPRINT_STARTCODE, HEX);
-  Serial.print(" 0x");
-  Serial.print((uint8_t)(addr >> 24), HEX);
-  Serial.print(" 0x");
-  Serial.print((uint8_t)(addr >> 16), HEX);
-  Serial.print(" 0x");
-  Serial.print((uint8_t)(addr >> 8), HEX);
-  Serial.print(" 0x");
-  Serial.print((uint8_t)(addr), HEX);
-  Serial.print(" 0x");
-  Serial.print((uint8_t)packettype, HEX);
-  Serial.print(" 0x");
-  Serial.print((uint8_t)(len >> 8), HEX);
-  Serial.print(" 0x");
-  Serial.print((uint8_t)(len), HEX);
-#endif
- 
 #if ARDUINO >= 100
-  mySerial->write((uint8_t)(FINGERPRINT_STARTCODE >> 8));
-  mySerial->write((uint8_t)FINGERPRINT_STARTCODE);
-  mySerial->write((uint8_t)(addr >> 24));
-  mySerial->write((uint8_t)(addr >> 16));
-  mySerial->write((uint8_t)(addr >> 8));
-  mySerial->write((uint8_t)(addr));
-  mySerial->write((uint8_t)packettype);
-  mySerial->write((uint8_t)(len >> 8));
-  mySerial->write((uint8_t)(len));
+  #define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__)
 #else
-  mySerial->print((uint8_t)(FINGERPRINT_STARTCODE >> 8), BYTE);
-  mySerial->print((uint8_t)FINGERPRINT_STARTCODE, BYTE);
-  mySerial->print((uint8_t)(addr >> 24), BYTE);
-  mySerial->print((uint8_t)(addr >> 16), BYTE);
-  mySerial->print((uint8_t)(addr >> 8), BYTE);
-  mySerial->print((uint8_t)(addr), BYTE);
-  mySerial->print((uint8_t)packettype, BYTE);
-  mySerial->print((uint8_t)(len >> 8), BYTE);
-  mySerial->print((uint8_t)(len), BYTE);
+  #define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__, BYTE)
 #endif
-  
-  uint16_t sum = (len>>8) + (len&0xFF) + packettype;
-  for (uint8_t i=0; i< len-2; i++) {
-#if ARDUINO >= 100
-    mySerial->write((uint8_t)(packet[i]));
-#else
-    mySerial->print((uint8_t)(packet[i]), BYTE);
-#endif
-#ifdef FINGERPRINT_DEBUG
-    Serial.print(" 0x"); Serial.print(packet[i], HEX);
-#endif
-    sum += packet[i];
+
+#define SERIAL_WRITE_U16(v) SERIAL_WRITE((uint8_t)(v>>8)); SERIAL_WRITE((uint8_t)(v & 0xFF));
+
+void Adafruit_Fingerprint::writeStructuredPacket(const Adafruit_Fingerprint_Packet & packet) {
+  SERIAL_WRITE_U16(packet.start_code);
+  SERIAL_WRITE(packet.address[0]);
+  SERIAL_WRITE(packet.address[1]);
+  SERIAL_WRITE(packet.address[2]);
+  SERIAL_WRITE(packet.address[3]);
+  SERIAL_WRITE(packet.type);
+
+  uint16_t wire_length = packet.length + 2;
+  SERIAL_WRITE_U16(wire_length);
+
+  uint16_t sum = ((wire_length)>>8) + ((wire_length)&0xFF) + packet.type;
+  for (uint8_t i=0; i< packet.length; i++) {
+    SERIAL_WRITE(packet.data[i]);
+    sum += packet.data[i];
   }
-#ifdef FINGERPRINT_DEBUG
-  //Serial.print("Checksum = 0x"); Serial.println(sum);
-  Serial.print(" 0x"); Serial.print((uint8_t)(sum>>8), HEX);
-  Serial.print(" 0x"); Serial.println((uint8_t)(sum), HEX);
-#endif
-#if ARDUINO >= 100
-  mySerial->write((uint8_t)(sum>>8));
-  mySerial->write((uint8_t)sum);
-#else
-  mySerial->print((uint8_t)(sum>>8), BYTE);
-  mySerial->print((uint8_t)sum, BYTE);
-#endif
+
+  SERIAL_WRITE_U16(sum);
+  return;
 }
 
+uint8_t Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet * packet, uint16_t timeout) {
+  uint8_t byte;
+  uint16_t idx=0, timer=0;
 
-uint8_t Adafruit_Fingerprint::getReply(uint8_t packet[], uint16_t timeout) {
-    uint8_t reply[20], idx;
-  uint16_t timer=0;
-  
-  idx = 0;
-#ifdef FINGERPRINT_DEBUG
-  Serial.print("<--- ");
-#endif
-while (true) {
-    while (!mySerial->available()) {
-      delay(1);
-      timer++;
-      if (timer >= timeout) return FINGERPRINT_TIMEOUT;
+  while(true) {
+    while(!mySerial->available()) {
+      delay(1); timer++; if(timer>=timeout) return FINGERPRINT_TIMEOUT;
     }
-    // something to read!
-    reply[idx] = mySerial->read();
-#ifdef FINGERPRINT_DEBUG
-    Serial.print(" 0x"); Serial.print(reply[idx], HEX);
-#endif
-    if ((idx == 0) && (reply[0] != (FINGERPRINT_STARTCODE >> 8)))
-      continue;
+    byte = mySerial->read();
+    switch(idx) {
+      case 0:
+        if(byte != FINGERPRINT_STARTCODE>>8) continue;
+        packet->start_code = byte << 8;
+        break;
+      case 1:
+        packet->start_code |= byte & 0xFF;
+        if(packet->start_code != FINGERPRINT_STARTCODE) return FINGERPRINT_BADPACKET;
+        break;
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+        packet->address[idx-2] = byte;
+        break;
+      case 6: packet->type = byte; break;
+      case 7: packet->length = byte << 8; break;
+      case 8: packet->length |= byte & 0xFF; break;
+      default:
+        packet->data[idx-9] = byte;
+        if((idx-8) == packet->length)
+          return FINGERPRINT_OK;
+        break;
+    }
     idx++;
-    
-    // check packet!
-    if (idx >= 9) {
-      if ((reply[0] != (FINGERPRINT_STARTCODE >> 8)) ||
-          (reply[1] != (FINGERPRINT_STARTCODE & 0xFF)))
-          return FINGERPRINT_BADPACKET;
-      uint8_t packettype = reply[6];
-      //Serial.print("Packet type"); Serial.println(packettype);
-      uint16_t len = reply[7];
-      len <<= 8;
-      len |= reply[8];
-      len -= 2;
-      //Serial.print("Packet len"); Serial.println(len);
-      if (idx <= (len+10)) continue;
-      packet[0] = packettype;      
-      for (uint8_t i=0; i<len; i++) {
-        packet[1+i] = reply[9+i];
-      }
-#ifdef FINGERPRINT_DEBUG
-      Serial.println();
-#endif
-      return len;
-    }
   }
 }
-
