@@ -15,7 +15,9 @@
  ****************************************************/
 
 #include "Adafruit_Fingerprint.h"
-#include <util/delay.h>
+#ifdef __avr__
+	#include <util/delay.h>
+#endif
 #include <SoftwareSerial.h>
 
 Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss) {
