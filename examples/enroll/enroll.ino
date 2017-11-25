@@ -15,22 +15,21 @@
  ****************************************************/
 
 #include <Adafruit_Fingerprint.h>
-#include <SoftwareSerial.h>
-
-uint8_t id;
-
-uint8_t getFingerprintEnroll();
-
-// Software serial for when you dont have a hardware serial port
-// pin #2 is IN from sensor (GREEN wire)
-// pin #3 is OUT from arduino  (WHITE wire)
-// On Leonardo/Micro/Yun, use pins 8 & 9. On Mega, just grab a hardware serialport 
-SoftwareSerial mySerial(2, 3);
-Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 // On Leonardo/Micro or others with hardware serial, use those! #0 is green wire, #1 is white
-//Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial1);
+// uncomment this line:
+// #define mySerial Serial1
 
+// For UNO and others without hardware serial, we must use software serial...
+// pin #2 is IN from sensor (GREEN wire)
+// pin #3 is OUT from arduino  (WHITE wire)
+// comment these two lines if using hardware serial
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(2, 3);
+
+Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
+
+uint8_t id;
 
 void setup()  
 {
@@ -53,24 +52,22 @@ void setup()
 
 uint8_t readnumber(void) {
   uint8_t num = 0;
-  boolean validnum = false; 
-  while (1) {
+  
+  while (num == 0) {
     while (! Serial.available());
-    char c = Serial.read();
-    if (isdigit(c)) {
-       num *= 10;
-       num += c - '0';
-       validnum = true;
-    } else if (validnum) {
-      return num;
-    }
+    num = Serial.parseInt();
   }
+  return num;
 }
 
 void loop()                     // run over and over again
 {
-  Serial.println("Ready to enroll a fingerprint! Please Type in the ID # you want to save this finger as...");
+  Serial.println("Ready to enroll a fingerprint!");
+  Serial.println("Please type in the ID # (from 1 to 127) you want to save this finger as...");
   id = readnumber();
+  if (id == 0) {// ID #0 not allowed, try again!
+     return;
+  }
   Serial.print("Enrolling ID #");
   Serial.println(id);
   
