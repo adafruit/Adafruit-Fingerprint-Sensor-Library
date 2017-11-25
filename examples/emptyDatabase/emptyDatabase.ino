@@ -12,22 +12,34 @@
  ****************************************************/
 
 #include <Adafruit_Fingerprint.h>
-#include <SoftwareSerial.h>
-
-// Software serial for when you dont have a hardware serial port
-// pin #2 is IN from sensor (GREEN wire)
-// pin #3 is OUT from arduino  (WHITE wire)
-// On Leonardo/Micro/Yun, use pins 8 & 9. On Mega, just grab a hardware serialport 
-SoftwareSerial mySerial(2, 3);
-Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 // On Leonardo/Micro or others with hardware serial, use those! #0 is green wire, #1 is white
-//Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial1);
+// uncomment this line:
+// #define mySerial Serial1
+
+// For UNO and others without hardware serial, we must use software serial...
+// pin #2 is IN from sensor (GREEN wire)
+// pin #3 is OUT from arduino  (WHITE wire)
+// comment these two lines if using hardware serial
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(2, 3);
+
+Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 void setup()  
 {
   Serial.begin(9600);
-  Serial.println("Delete all templates");
+  while (!Serial);  // For Yun/Leo/Micro/Zero/...
+  delay(100);
+
+  Serial.println("\n\nDeleting all fingerprint templates!");
+  Serial.println("Press 'Y' key to continue");
+
+  while (1) {
+    if (Serial.available() && (Serial.read() == 'Y')) {
+      break;
+    }
+  }
 
   // set the data rate for the sensor serial port
   finger.begin(57600);
@@ -43,3 +55,7 @@ void setup()
 
   Serial.println("Now database is empty :)");
 }
+
+void loop() {
+}
+
