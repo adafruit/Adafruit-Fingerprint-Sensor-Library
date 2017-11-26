@@ -94,8 +94,8 @@ uint8_t Adafruit_Fingerprint::getModel(void) {
   SEND_CMD_PACKET(FINGERPRINT_UPLOAD, 0x01);
 }
 
-uint8_t Adafruit_Fingerprint::deleteModel(uint16_t id) {
-  SEND_CMD_PACKET(FINGERPRINT_DELETE, (uint8_t)(id>>8), (uint8_t)(id & 0xFF), 0x00, 0x01);
+uint8_t Adafruit_Fingerprint::deleteModel(uint16_t id, uint16_t length) {
+  SEND_CMD_PACKET(FINGERPRINT_DELETE, (uint8_t)(id>>8), (uint8_t)(id & 0xFF), (uint8_t)(length>>8), (uint8_t)(length & 0xFF));
 }
 
 uint8_t Adafruit_Fingerprint::emptyDatabase(void) {

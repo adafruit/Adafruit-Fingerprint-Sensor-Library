@@ -108,7 +108,7 @@ class Adafruit_Fingerprint {
   uint8_t storeModel(uint16_t id);
   uint8_t loadModel(uint16_t id);
   uint8_t getModel(void);
-  uint8_t deleteModel(uint16_t id);
+  uint8_t deleteModel(uint16_t id, uint16_t length = 1);
   uint8_t fingerFastSearch(void);
   uint8_t getTemplateCount(void);
   void writeStructuredPacket(const Adafruit_Fingerprint_Packet & p);
