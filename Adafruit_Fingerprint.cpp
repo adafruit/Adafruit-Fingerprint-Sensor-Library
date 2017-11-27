@@ -129,6 +129,10 @@ uint8_t Adafruit_Fingerprint::getTemplateCount(void) {
   return packet.data[0];
 }
 
+uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
+  SEND_CMD_PACKET(FINGERPRINT_SETPASSWORD, (password >> 24), (password >> 16), (password >> 8), password);
+}
+
 #if ARDUINO >= 100
   #define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__)
 #else
