@@ -31,10 +31,30 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss) {
   swSerial = ss;
   mySerial = swSerial;
 }
+
+Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss, uint32_t password) {
+  thePassword = password;
+  theAddress = 0xFFFFFFFF;
+
+  hwSerial = NULL;
+  swSerial = ss;
+  mySerial = swSerial;
+}
 #endif
 
 Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss) {
   thePassword = 0;
+  theAddress = 0xFFFFFFFF;
+
+#if defined(__AVR__) || defined(ESP8266)
+  swSerial = NULL;
+#endif
+  hwSerial = ss;
+  mySerial = hwSerial;
+}
+
+Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss, uint32_t password) {
+  thePassword = password;
   theAddress = 0xFFFFFFFF;
 
 #if defined(__AVR__) || defined(ESP8266)
@@ -127,6 +147,10 @@ uint8_t Adafruit_Fingerprint::getTemplateCount(void) {
   templateCount |= packet.data[2];
 
   return packet.data[0];
+}
+
+uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
+  SEND_CMD_PACKET(FINGERPRINT_SETPASSWORD, (password >> 24), (password >> 16), (password >> 8), password);
 }
 
 #if ARDUINO >= 100
