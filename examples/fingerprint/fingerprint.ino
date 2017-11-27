@@ -16,24 +16,26 @@
 
 
 #include <Adafruit_Fingerprint.h>
-#include <SoftwareSerial.h>
-
-int getFingerprintIDez();
-
-// pin #2 is IN from sensor (GREEN wire)
-// pin #3 is OUT from arduino  (WHITE wire)
-SoftwareSerial mySerial(2, 3);
-Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 // On Leonardo/Micro or others with hardware serial, use those! #0 is green wire, #1 is white
-//Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial1);
+// uncomment this line:
+// #define mySerial Serial1
+
+// For UNO and others without hardware serial, we must use software serial...
+// pin #2 is IN from sensor (GREEN wire)
+// pin #3 is OUT from arduino  (WHITE wire)
+// comment these two lines if using hardware serial
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(2, 3);
+
+Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 void setup()  
 {
-  while (!Serial);  // For Yun/Leo/Micro/Zero/...
-  
   Serial.begin(9600);
-  Serial.println("Adafruit finger detect test");
+  while (!Serial);  // For Yun/Leo/Micro/Zero/...
+  delay(100);
+  Serial.println("\n\nAdafruit finger detect test");
 
   // set the data rate for the sensor serial port
   finger.begin(57600);
@@ -42,7 +44,7 @@ void setup()
     Serial.println("Found fingerprint sensor!");
   } else {
     Serial.println("Did not find fingerprint sensor :(");
-    while (1);
+    while (1) { delay(1); }
   }
   Serial.println("Waiting for valid finger...");
 }
@@ -115,6 +117,8 @@ uint8_t getFingerprintID() {
   // found a match!
   Serial.print("Found ID #"); Serial.print(finger.fingerID); 
   Serial.print(" with confidence of "); Serial.println(finger.confidence); 
+
+  return finger.fingerID;
 }
 
 // returns -1 if failed, otherwise returns ID #
