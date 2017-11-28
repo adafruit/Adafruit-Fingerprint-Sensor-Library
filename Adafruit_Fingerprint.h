@@ -114,7 +114,12 @@ class Adafruit_Fingerprint {
   void writeStructuredPacket(const Adafruit_Fingerprint_Packet & p);
   uint8_t getStructuredPacket(Adafruit_Fingerprint_Packet * p, uint16_t timeout=DEFAULTTIMEOUT);
 
-  uint16_t fingerID, confidence, templateCount;
+  /// The matching location that is set by fingerFastSearch()
+  uint16_t fingerID;
+  /// The confidence of the fingerFastSearch() match, higher numbers are more confidents
+  uint16_t confidence;
+  /// The number of stored templates in the sensor, set by getTemplateCount()
+  uint16_t templateCount;
 
  private:
   uint32_t thePassword;
