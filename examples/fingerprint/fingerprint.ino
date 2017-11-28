@@ -46,6 +46,9 @@ void setup()
     Serial.println("Did not find fingerprint sensor :(");
     while (1) { delay(1); }
   }
+
+  finger.getTemplateCount();
+  Serial.print("Sensor contains "); Serial.print(finger.templateCount); Serial.println(" templates");
   Serial.println("Waiting for valid finger...");
 }
 
