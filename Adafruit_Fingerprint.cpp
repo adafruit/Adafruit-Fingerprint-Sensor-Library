@@ -47,11 +47,12 @@
 /*!
     @brief  Instantiates sensor with Software Serial
     @param  ss Pointer to SoftwareSerial object
+    @param  password 32-bit integer password (default is 0)
 */
 /**************************************************************************/
 #if defined(__AVR__) || defined(ESP8266)
-Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss) {
-  thePassword = 0;
+Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss, uint32_t password) {
+  thePassword = password;
   theAddress = 0xFFFFFFFF;
 
   hwSerial = NULL;
@@ -64,16 +65,18 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss) {
 /*!
     @brief  Instantiates sensor with Hardware Serial
     @param  hs Pointer to HardwareSerial object
+    @param  password 32-bit integer password (default is 0)
+
 */
 /**************************************************************************/
-Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *hs) {
-  thePassword = 0;
+Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss, uint32_t password) {
+  thePassword = password;
   theAddress = 0xFFFFFFFF;
 
 #if defined(__AVR__) || defined(ESP8266)
   swSerial = NULL;
 #endif
-  hwSerial = hs;
+  hwSerial = ss;
   mySerial = hwSerial;
 }
 
@@ -253,9 +256,21 @@ uint8_t Adafruit_Fingerprint::getTemplateCount(void) {
 
 /**************************************************************************/
 /*!
+    @brief   Set the password on the sensor (future communication will require password verification so don't forget it!!!)
+    @param   password 32-bit password code
+    @returns <code>FINGERPRINT_OK</code> on success
+    @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
+*/
+uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
+  SEND_CMD_PACKET(FINGERPRINT_SETPASSWORD, (password >> 24), (password >> 16), (password >> 8), password);
+}
+
+/**************************************************************************/
+/*!
     @brief   Helper function to process a packet and send it over UART to the sensor
     @params  packet A structure containing the bytes to transmit
 */
+
 void Adafruit_Fingerprint::writeStructuredPacket(const Adafruit_Fingerprint_Packet & packet) {
   SERIAL_WRITE_U16(packet.start_code);
   SERIAL_WRITE(packet.address[0]);
