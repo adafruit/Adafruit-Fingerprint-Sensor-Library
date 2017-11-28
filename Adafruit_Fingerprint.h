@@ -69,7 +69,7 @@
 
 //#define FINGERPRINT_DEBUG
 
-#define DEFAULTTIMEOUT 5000  // milliseconds
+#define DEFAULTTIMEOUT 1000  // milliseconds
 
 struct Adafruit_Fingerprint_Packet {
   Adafruit_Fingerprint_Packet(uint8_t type, uint16_t length, uint8_t * data) {
@@ -122,6 +122,7 @@ class Adafruit_Fingerprint {
   uint16_t templateCount;
 
  private:
+  uint8_t checkPassword(void);
   uint32_t thePassword;
   uint32_t theAddress;
     uint8_t recvPacket[20];
