@@ -18,7 +18,7 @@
  ****************************************************/
 
 #include "Arduino.h"
-#if defined(__AVR__) || defined(ESP8266)
+#if (defined(__AVR__) || defined(ESP8266)) && !defined(_DISABLE_SOFTSERIAL_) // You could append "-D_DISABLE_SOFTSERIAL_" to the build command to disable SoftwareSerial for a project
   #include <SoftwareSerial.h>
 #endif
 
@@ -93,7 +93,7 @@ struct Adafruit_Fingerprint_Packet {
 
 class Adafruit_Fingerprint {
  public:
-#if defined(__AVR__) || defined(ESP8266)
+#if (defined(__AVR__) || defined(ESP8266)) && !defined(_DISABLE_SOFTSERIAL_)
   Adafruit_Fingerprint(SoftwareSerial *, uint32_t password = 0x0);
 #endif
   Adafruit_Fingerprint(HardwareSerial *, uint32_t password = 0x0);
@@ -130,7 +130,7 @@ class Adafruit_Fingerprint {
     uint8_t recvPacket[20];
 
   Stream *mySerial;
-#if defined(__AVR__) || defined(ESP8266)
+#if (defined(__AVR__) || defined(ESP8266)) && !defined(_DISABLE_SOFTSERIAL_)
   SoftwareSerial *swSerial;
 #endif
   HardwareSerial *hwSerial;
