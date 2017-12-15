@@ -86,7 +86,7 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss, uint32_t password
     @param  baudrate Sensor's UART baud rate (usually 57600, 9600 or 115200)
 */
 /**************************************************************************/
-void Adafruit_Fingerprint::begin(uint16_t baudrate) {
+void Adafruit_Fingerprint::begin(uint32_t baudrate) {
   delay(1000);  // one second delay to let the sensor 'boot up'
 
   if (hwSerial) hwSerial->begin(baudrate);
