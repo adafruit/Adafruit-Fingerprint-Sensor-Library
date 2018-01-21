@@ -98,7 +98,7 @@ class Adafruit_Fingerprint {
 #endif
   Adafruit_Fingerprint(HardwareSerial *, uint32_t password = 0x0);
 
-  void begin(uint16_t baud);
+  void begin(uint32_t baud);
 
   boolean verifyPassword(void);
   uint8_t getImage(void);
