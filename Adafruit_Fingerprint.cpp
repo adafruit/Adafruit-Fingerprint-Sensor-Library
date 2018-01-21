@@ -15,7 +15,7 @@
  ****************************************************/
 
 #include "Adafruit_Fingerprint.h"
-#if defined(__AVR__) || defined(ESP8266)
+#if (defined(__AVR__) || defined(ESP8266)) && !defined(_DISABLE_SOFTSERIAL_)
     #include <SoftwareSerial.h>
 #endif
 
@@ -50,7 +50,7 @@
     @param  password 32-bit integer password (default is 0)
 */
 /**************************************************************************/
-#if defined(__AVR__) || defined(ESP8266)
+#if (defined(__AVR__) || defined(ESP8266)) && !defined(_DISABLE_SOFTSERIAL_)
 Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss, uint32_t password) {
   thePassword = password;
   theAddress = 0xFFFFFFFF;
@@ -73,7 +73,7 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss, uint32_t password
   thePassword = password;
   theAddress = 0xFFFFFFFF;
 
-#if defined(__AVR__) || defined(ESP8266)
+#if (defined(__AVR__) || defined(ESP8266)) && !defined(_DISABLE_SOFTSERIAL_)
   swSerial = NULL;
 #endif
   hwSerial = ss;
@@ -90,7 +90,7 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
   delay(1000);  // one second delay to let the sensor 'boot up'
 
   if (hwSerial) hwSerial->begin(baudrate);
-#if defined(__AVR__) || defined(ESP8266)
+#if (defined(__AVR__) || defined(ESP8266)) && !defined(_DISABLE_SOFTSERIAL_)
   if (swSerial) swSerial->begin(baudrate);
 #endif
 }
