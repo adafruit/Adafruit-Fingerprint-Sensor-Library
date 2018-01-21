@@ -76,7 +76,7 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *hs, uint32_t password
 #if defined(__AVR__) || defined(ESP8266)
   swSerial = NULL;
 #endif
-  hwSerial = ss;
+  hwSerial = hs;
   mySerial = hwSerial;
 }
 
