@@ -70,9 +70,20 @@
 
 //#define FINGERPRINT_DEBUG
 
-#define DEFAULTTIMEOUT 1000  // milliseconds
+#define DEFAULTTIMEOUT 1000  ///< UART reading timeout in milliseconds
 
+///! Helper class to craft UART packets
 struct Adafruit_Fingerprint_Packet {
+
+/**************************************************************************/
+/*!
+    @brief   Create a new UART-borne packet
+    @param   type Command, data, ack type packet
+    @param   length Size of payload
+    @param   data Pointer to bytes of size length we will memcopy into the internal buffer
+*/
+/**************************************************************************/
+
   Adafruit_Fingerprint_Packet(uint8_t type, uint16_t length, uint8_t * data) {
     this->start_code = FINGERPRINT_STARTCODE;
     this->type = type;
@@ -84,19 +95,20 @@ struct Adafruit_Fingerprint_Packet {
     else
       memcpy(this->data, data, 64);
   }
-  uint16_t start_code;
-  uint8_t address[4];
-  uint8_t type;
-  uint16_t length;
-  uint8_t data[64];
+  uint16_t start_code;      ///< "Wakeup" code for packet detection
+  uint8_t address[4];       ///< 32-bit Fingerprint sensor address
+  uint8_t type;             ///< Type of packet
+  uint16_t length;          ///< Length of packet
+  uint8_t data[64];         ///< The raw buffer for packet payload
 };
 
+///! Helper class to communicate with and keep state for fingerprint sensors
 class Adafruit_Fingerprint {
  public:
 #if defined(__AVR__) || defined(ESP8266)
-  Adafruit_Fingerprint(SoftwareSerial *, uint32_t password = 0x0);
+  Adafruit_Fingerprint(SoftwareSerial *ss, uint32_t password = 0x0);
 #endif
-  Adafruit_Fingerprint(HardwareSerial *, uint32_t password = 0x0);
+  Adafruit_Fingerprint(HardwareSerial *hs, uint32_t password = 0x0);
 
   void begin(uint32_t baud);
 

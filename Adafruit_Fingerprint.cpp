@@ -43,6 +43,7 @@
  ***************************************************************************/
 
 
+#if defined(__AVR__) || defined(ESP8266)
 /**************************************************************************/
 /*!
     @brief  Instantiates sensor with Software Serial
@@ -50,7 +51,6 @@
     @param  password 32-bit integer password (default is 0)
 */
 /**************************************************************************/
-#if defined(__AVR__) || defined(ESP8266)
 Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss, uint32_t password) {
   thePassword = password;
   theAddress = 0xFFFFFFFF;
@@ -69,7 +69,7 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(SoftwareSerial *ss, uint32_t password
 
 */
 /**************************************************************************/
-Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *ss, uint32_t password) {
+Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *hs, uint32_t password) {
   thePassword = password;
   theAddress = 0xFFFFFFFF;
 
@@ -221,6 +221,7 @@ uint8_t Adafruit_Fingerprint::emptyDatabase(void) {
     @returns <code>FINGERPRINT_NOTFOUND</code> no match made
     @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
 */
+/**************************************************************************/
 uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   // high speed search of slot #1 starting at page 0x0000 and page #0x00A3
   GET_CMD_PACKET(FINGERPRINT_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3);
@@ -244,6 +245,7 @@ uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
     @returns <code>FINGERPRINT_OK</code> on success
     @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
 */
+/**************************************************************************/
 uint8_t Adafruit_Fingerprint::getTemplateCount(void) {
   GET_CMD_PACKET(FINGERPRINT_TEMPLATECOUNT);
 
@@ -261,6 +263,7 @@ uint8_t Adafruit_Fingerprint::getTemplateCount(void) {
     @returns <code>FINGERPRINT_OK</code> on success
     @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
 */
+/**************************************************************************/
 uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
   SEND_CMD_PACKET(FINGERPRINT_SETPASSWORD, (password >> 24), (password >> 16), (password >> 8), password);
 }
@@ -268,8 +271,9 @@ uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
 /**************************************************************************/
 /*!
     @brief   Helper function to process a packet and send it over UART to the sensor
-    @params  packet A structure containing the bytes to transmit
+    @param   packet A structure containing the bytes to transmit
 */
+/**************************************************************************/
 
 void Adafruit_Fingerprint::writeStructuredPacket(const Adafruit_Fingerprint_Packet & packet) {
   SERIAL_WRITE_U16(packet.start_code);
@@ -295,9 +299,12 @@ void Adafruit_Fingerprint::writeStructuredPacket(const Adafruit_Fingerprint_Pack
 /**************************************************************************/
 /*!
     @brief   Helper function to receive data over UART from the sensor and process it into a packet
-    @params  packet A structure containing the bytes received
-    @params  timeount how many milliseconds we're willing to wait
+    @param   packet A structure containing the bytes received
+    @param   timeout how many milliseconds we're willing to wait
+    @returns <code>FINGERPRINT_OK</code> on success
+    @returns <code>FINGERPRINT_TIMEOUT</code> or <code>FINGERPRINT_BADPACKET</code> on failure
 */
+/**************************************************************************/
 uint8_t Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet * packet, uint16_t timeout) {
   uint8_t byte;
   uint16_t idx=0, timer=0;
