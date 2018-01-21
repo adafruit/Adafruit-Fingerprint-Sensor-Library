@@ -7,14 +7,12 @@ Secure your project with biometrics - this all-in-one optical fingerprint sensor
 
 Designed specifically to work with the Adafruit Fingerprint sensor
   * http://www.adafruit.com/products/751
+
 Pick one up today in the adafruit shop!
 
-These sensors use TTL Serial to communicate, 2 pins are required to  
-interface
+These sensors use TTL Serial to communicate, 2 pins are required to interface
 
-Adafruit invests time and resources providing this open source code, 
-please support Adafruit and open-source hardware by purchasing 
-products from Adafruit!
+Adafruit invests time and resources providing this open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!
 
 Written by Limor Fried/Ladyada  for Adafruit Industries.  
 BSD license, check license.txt for more information
