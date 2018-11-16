@@ -67,6 +67,8 @@
 #define FINGERPRINT_VERIFYPASSWORD 0x13
 #define FINGERPRINT_HISPEEDSEARCH 0x1B
 #define FINGERPRINT_TEMPLATECOUNT 0x1D
+#define FINGERPRINT_OPENLED 0x50
+#define FINGERPRINT_CLOSELED 0x51
 
 //#define FINGERPRINT_DEBUG
 
@@ -115,6 +117,8 @@ class Adafruit_Fingerprint {
   boolean verifyPassword(void);
   uint8_t getImage(void);
   uint8_t image2Tz(uint8_t slot = 1);
+  uint8_t ledOn(void);
+  uint8_t ledOff(void);
   uint8_t createModel(void);
 
   uint8_t emptyDatabase(void);

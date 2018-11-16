@@ -144,6 +144,26 @@ uint8_t Adafruit_Fingerprint::image2Tz(uint8_t slot) {
 
 /**************************************************************************/
 /*!
+    @brief   Ask the sensor to turn on the LED
+    @returns <code>FINGERPRINT_OK</code> on success
+*/
+/**************************************************************************/
+uint8_t Adafruit_Fingerprint::ledOn(void) {
+  SEND_CMD_PACKET(FINGERPRINT_OPENLED); 
+}
+
+/**************************************************************************/
+/*!
+    @brief   Ask the sensor to turn off the LED
+    @returns <code>FINGERPRINT_OK</code> on success
+*/
+/**************************************************************************/
+uint8_t Adafruit_Fingerprint::ledOff(void) {
+  SEND_CMD_PACKET(FINGERPRINT_CLOSELED); 
+}
+
+/**************************************************************************/
+/*!
     @brief   Ask the sensor to take two print feature template and create a model
     @returns <code>FINGERPRINT_OK</code> on success
     @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
