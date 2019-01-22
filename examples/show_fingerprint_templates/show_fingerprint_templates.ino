@@ -11,7 +11,6 @@
 
 
 #include <Adafruit_Fingerprint.h>
-#include <SoftwareSerial.h>
 
 int getFingerprintIDez();
 

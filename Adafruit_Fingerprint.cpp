@@ -15,9 +15,6 @@
  ****************************************************/
 
 #include "Adafruit_Fingerprint.h"
-#if defined(__AVR__) || defined(ESP8266)
-    #include <SoftwareSerial.h>
-#endif
 
 //#define FINGERPRINT_DEBUG
 
@@ -43,7 +40,7 @@
  ***************************************************************************/
 
 
-#if defined(__AVR__) || defined(ESP8266)
+#if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
 /**************************************************************************/
 /*!
     @brief  Instantiates sensor with Software Serial
@@ -73,7 +70,7 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *hs, uint32_t password
   thePassword = password;
   theAddress = 0xFFFFFFFF;
 
-#if defined(__AVR__) || defined(ESP8266)
+#if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
   swSerial = NULL;
 #endif
   hwSerial = hs;
@@ -90,7 +87,7 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
   delay(1000);  // one second delay to let the sensor 'boot up'
 
   if (hwSerial) hwSerial->begin(baudrate);
-#if defined(__AVR__) || defined(ESP8266)
+#if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
   if (swSerial) swSerial->begin(baudrate);
 #endif
 }
