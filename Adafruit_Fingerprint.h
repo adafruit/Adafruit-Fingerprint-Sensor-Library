@@ -20,6 +20,9 @@
 #include "Arduino.h"
 #if defined(__AVR__) || defined(ESP8266)
   #include <SoftwareSerial.h>
+#elif defined(FREEDOM_E300_HIFIVE1)
+  #include <SoftwareSerial32.h>
+  #define SoftwareSerial SoftwareSerial32
 #endif
 
 #define FINGERPRINT_OK 0x00
@@ -105,7 +108,7 @@ struct Adafruit_Fingerprint_Packet {
 ///! Helper class to communicate with and keep state for fingerprint sensors
 class Adafruit_Fingerprint {
  public:
-#if defined(__AVR__) || defined(ESP8266)
+#if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
   Adafruit_Fingerprint(SoftwareSerial *ss, uint32_t password = 0x0);
 #endif
   Adafruit_Fingerprint(HardwareSerial *hs, uint32_t password = 0x0);
@@ -142,7 +145,7 @@ class Adafruit_Fingerprint {
     uint8_t recvPacket[20];
 
   Stream *mySerial;
-#if defined(__AVR__) || defined(ESP8266)
+#if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
   SoftwareSerial *swSerial;
 #endif
   HardwareSerial *hwSerial;
