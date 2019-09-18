@@ -6,7 +6,7 @@ Secure your project with biometrics - this all-in-one optical fingerprint sensor
 
 
 Designed specifically to work with the Adafruit Fingerprint sensor
-  * http://www.adafruit.com/products/751
+  * https://learn.adafruit.com/adafruit-optical-fingerprint-sensor
 
 Pick one up today in the adafruit shop!
 
