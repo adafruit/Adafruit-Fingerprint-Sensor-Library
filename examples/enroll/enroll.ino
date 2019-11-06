@@ -11,6 +11,7 @@
   products from Adafruit!
 
   Written by Limor Fried/Ladyada for Adafruit Industries.  
+  Small bug-fix by Michael cochez
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
@@ -68,8 +69,11 @@ void loop()                     // run over and over again
   }
   Serial.print("Enrolling ID #");
   Serial.println(id);
-  
-  while (!  getFingerprintEnroll() );
+  //assume an error happened
+  int error = 1;
+  while (error){
+    error = getFingerprintEnroll();
+  }
 }
 
 uint8_t getFingerprintEnroll() {
@@ -83,7 +87,7 @@ uint8_t getFingerprintEnroll() {
       Serial.println("Image taken");
       break;
     case FINGERPRINT_NOFINGER:
-      Serial.println(".");
+      Serial.print(".");
       break;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
@@ -196,6 +200,7 @@ uint8_t getFingerprintEnroll() {
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
     Serial.println("Stored!");
+    return 0;
   } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
     Serial.println("Communication error");
     return p;
