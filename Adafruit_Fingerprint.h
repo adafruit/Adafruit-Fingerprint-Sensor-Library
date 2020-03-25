@@ -19,10 +19,10 @@
 
 #include "Arduino.h"
 #if defined(__AVR__) || defined(ESP8266)
-  #include <SoftwareSerial.h>
+#include <SoftwareSerial.h>
 #elif defined(FREEDOM_E300_HIFIVE1)
-  #include <SoftwareSerial32.h>
-  #define SoftwareSerial SoftwareSerial32
+#include <SoftwareSerial32.h>
+#define SoftwareSerial SoftwareSerial32
 #endif
 
 #define FINGERPRINT_OK 0x00
@@ -73,41 +73,44 @@
 
 //#define FINGERPRINT_DEBUG
 
-#define DEFAULTTIMEOUT 1000  ///< UART reading timeout in milliseconds
+#define DEFAULTTIMEOUT 1000 ///< UART reading timeout in milliseconds
 
 ///! Helper class to craft UART packets
 struct Adafruit_Fingerprint_Packet {
 
-/**************************************************************************/
-/*!
-    @brief   Create a new UART-borne packet
-    @param   type Command, data, ack type packet
-    @param   length Size of payload
-    @param   data Pointer to bytes of size length we will memcopy into the internal buffer
-*/
-/**************************************************************************/
+  /**************************************************************************/
+  /*!
+      @brief   Create a new UART-borne packet
+      @param   type Command, data, ack type packet
+      @param   length Size of payload
+      @param   data Pointer to bytes of size length we will memcopy into the
+     internal buffer
+  */
+  /**************************************************************************/
 
-  Adafruit_Fingerprint_Packet(uint8_t type, uint16_t length, uint8_t * data) {
+  Adafruit_Fingerprint_Packet(uint8_t type, uint16_t length, uint8_t *data) {
     this->start_code = FINGERPRINT_STARTCODE;
     this->type = type;
     this->length = length;
-    address[0] = 0xFF; address[1] = 0xFF;
-    address[2] = 0xFF; address[3] = 0xFF;
-    if(length<64)
+    address[0] = 0xFF;
+    address[1] = 0xFF;
+    address[2] = 0xFF;
+    address[3] = 0xFF;
+    if (length < 64)
       memcpy(this->data, data, length);
     else
       memcpy(this->data, data, 64);
   }
-  uint16_t start_code;      ///< "Wakeup" code for packet detection
-  uint8_t address[4];       ///< 32-bit Fingerprint sensor address
-  uint8_t type;             ///< Type of packet
-  uint16_t length;          ///< Length of packet
-  uint8_t data[64];         ///< The raw buffer for packet payload
+  uint16_t start_code; ///< "Wakeup" code for packet detection
+  uint8_t address[4];  ///< 32-bit Fingerprint sensor address
+  uint8_t type;        ///< Type of packet
+  uint16_t length;     ///< Length of packet
+  uint8_t data[64];    ///< The raw buffer for packet payload
 };
 
 ///! Helper class to communicate with and keep state for fingerprint sensors
 class Adafruit_Fingerprint {
- public:
+public:
 #if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
   Adafruit_Fingerprint(SoftwareSerial *ss, uint32_t password = 0x0);
 #endif
@@ -128,21 +131,23 @@ class Adafruit_Fingerprint {
   uint8_t fingerFastSearch(void);
   uint8_t getTemplateCount(void);
   uint8_t setPassword(uint32_t password);
-  void writeStructuredPacket(const Adafruit_Fingerprint_Packet & p);
-  uint8_t getStructuredPacket(Adafruit_Fingerprint_Packet * p, uint16_t timeout=DEFAULTTIMEOUT);
+  void writeStructuredPacket(const Adafruit_Fingerprint_Packet &p);
+  uint8_t getStructuredPacket(Adafruit_Fingerprint_Packet *p,
+                              uint16_t timeout = DEFAULTTIMEOUT);
 
   /// The matching location that is set by fingerFastSearch()
   uint16_t fingerID;
-  /// The confidence of the fingerFastSearch() match, higher numbers are more confidents
+  /// The confidence of the fingerFastSearch() match, higher numbers are more
+  /// confidents
   uint16_t confidence;
   /// The number of stored templates in the sensor, set by getTemplateCount()
   uint16_t templateCount;
 
- private:
+private:
   uint8_t checkPassword(void);
   uint32_t thePassword;
   uint32_t theAddress;
-    uint8_t recvPacket[20];
+  uint8_t recvPacket[20];
 
   Stream *mySerial;
 #if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
