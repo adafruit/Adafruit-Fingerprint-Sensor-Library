@@ -1,4 +1,4 @@
-# Adafruit Fingerprint Sensor Library [![Build Status](https://travis-ci.org/adafruit/Adafruit-Fingerprint-Sensor-Library.svg?branch=master)](https://travis-ci.org/adafruit/Adafruit-Fingerprint-Sensor-Library)
+# Adafruit-Fingerprint-Sensor-Library [![Build Status](https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library/actions)
 
 <img src="https://cdn-shop.adafruit.com/970x728/751-03.jpg" height="300"/>
 
