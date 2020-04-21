@@ -1,4 +1,4 @@
-# Adafruit-Fingerprint-Sensor-Library [![Build Status](https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library/actions)
+# Adafruit-Fingerprint-Sensor-Library [![Build Status](https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit-Fingerprint-Sensor-Library/actions)[![Documentation](https://github.com/adafruit/ci-arduino/blob/master/assets/doxygen_badge.svg)](http://adafruit.github.io/Adafruit-Fingerprint-Sensor-Library/html/index.html)
 
 <img src="https://cdn-shop.adafruit.com/970x728/751-03.jpg" height="300"/>
 
