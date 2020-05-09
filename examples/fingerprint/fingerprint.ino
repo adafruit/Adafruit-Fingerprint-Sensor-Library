@@ -47,8 +47,14 @@ void setup()
   }
 
   finger.getTemplateCount();
-  Serial.print("Sensor contains "); Serial.print(finger.templateCount); Serial.println(" templates");
-  Serial.println("Waiting for valid finger...");
+
+    if (finger.templateCount == 0) {
+    Serial.print("Sensor doesn't contain any fingerprint data. Please run the 'enroll' example.");
+  } 
+  else {
+    Serial.println("Waiting for valid finger...");
+      Serial.print("Sensor contains "); Serial.print(finger.templateCount); Serial.println(" templates");
+  }
 }
 
 void loop()                     // run over and over again
