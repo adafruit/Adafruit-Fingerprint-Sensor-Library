@@ -146,11 +146,11 @@ private:
   Stream *mySerial;
 /// @cond DISABLE
 #if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
-/// @endcond
+  /// @endcond
   SoftwareSerial *swSerial;
 /// @cond DISABLE
 #endif
-/// @endcond
+  /// @endcond
   HardwareSerial *hwSerial;
 };
 

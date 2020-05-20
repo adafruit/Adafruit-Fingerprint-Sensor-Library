@@ -120,12 +120,12 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
     hwSerial->begin(baudrate);
 /// @cond DISABLE
 #if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
-/// @endcond
+  /// @endcond
   if (swSerial)
     swSerial->begin(baudrate);
 /// @cond DISABLE
 #endif
-/// @endcond
+  /// @endcond
 }
 
 /**************************************************************************/
