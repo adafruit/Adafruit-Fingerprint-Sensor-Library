@@ -1,48 +1,28 @@
-/*!
- * @file Adafruit_Fingerprint.cpp
- *
- * @mainpage Adafruit Fingerprint Sensor Library
- *
- * @section intro_sec Introduction
- *
- * This is a library for our optical Fingerprint sensor
- *
- * Designed specifically to work with the Adafruit Fingerprint sensor
- * ----> http://www.adafruit.com/products/751
- *
- * These displays use TTL Serial to communicate, 2 pins are required to
- * interface
- * Adafruit invests time and resources providing this open source code,
- * please support Adafruit and open-source hardware by purchasing
- * products from Adafruit!
- *
- * @section author Author
- *
- * Written by Limor Fried/Ladyada for Adafruit Industries.
- *
- * @section license License
- *
- * BSD license, all text above must be included in any redistribution
- *
- */
+/***************************************************
+  This is a library for our optical Fingerprint sensor
+
+  Designed specifically to work with the Adafruit Fingerprint sensor
+  ----> http://www.adafruit.com/products/751
+
+  These displays use TTL Serial to communicate, 2 pins are required to
+  interface
+  Adafruit invests time and resources providing this open source code,
+  please support Adafruit and open-source hardware by purchasing
+  products from Adafruit!
+
+  Written by Limor Fried/Ladyada for Adafruit Industries.
+  BSD license, all text above must be included in any redistribution
+ ****************************************************/
 
 #include "Adafruit_Fingerprint.h"
 
 //#define FINGERPRINT_DEBUG
 
-/// @cond DISABLE
 #if ARDUINO >= 100
-/// @endcond
-
 #define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__)
-/// @cond DISABLE
 #else
-/// @endcond
-
 #define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__, BYTE)
-/// @cond DISABLE
 #endif
-/// @endcond
 
 #define SERIAL_WRITE_U16(v)                                                    \
   SERIAL_WRITE((uint8_t)(v >> 8));                                             \
@@ -66,9 +46,7 @@
  PUBLIC FUNCTIONS
  ***************************************************************************/
 
-/// @cond DISABLE
 #if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
-/// @endcond
 /**************************************************************************/
 /*!
     @brief  Instantiates sensor with Software Serial
@@ -118,14 +96,10 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
 
   if (hwSerial)
     hwSerial->begin(baudrate);
-/// @cond DISABLE
 #if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
-/// @endcond
   if (swSerial)
     swSerial->begin(baudrate);
-/// @cond DISABLE
 #endif
-/// @endcond
 }
 
 /**************************************************************************/
