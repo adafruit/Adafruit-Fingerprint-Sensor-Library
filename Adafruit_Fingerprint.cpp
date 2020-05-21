@@ -30,19 +30,13 @@
 
 //#define FINGERPRINT_DEBUG
 
-/// @cond DISABLE
 #if ARDUINO >= 100
-/// @endcond
 
 #define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__)
-/// @cond DISABLE
 #else
-/// @endcond
 
 #define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__, BYTE)
-/// @cond DISABLE
 #endif
-/// @endcond
 
 #define SERIAL_WRITE_U16(v)                                                    \
   SERIAL_WRITE((uint8_t)(v >> 8));                                             \
@@ -66,9 +60,7 @@
  PUBLIC FUNCTIONS
  ***************************************************************************/
 
-/// @cond DISABLE
 #if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
-/// @endcond
 /**************************************************************************/
 /*!
     @brief  Instantiates sensor with Software Serial
@@ -118,14 +110,10 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
 
   if (hwSerial)
     hwSerial->begin(baudrate);
-/// @cond DISABLE
 #if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
-  /// @endcond
   if (swSerial)
     swSerial->begin(baudrate);
-/// @cond DISABLE
 #endif
-  /// @endcond
 }
 
 /**************************************************************************/

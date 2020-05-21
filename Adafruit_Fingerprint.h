@@ -6,18 +6,12 @@
  */
 
 #include "Arduino.h"
-/// @cond DISABLE
 #if defined(__AVR__) || defined(ESP8266)
-/// @endcond
 #include <SoftwareSerial.h>
-/// @cond DISABLE
 #elif defined(FREEDOM_E300_HIFIVE1)
-/// @endcond
 #include <SoftwareSerial32.h>
 #define SoftwareSerial SoftwareSerial32
-/// @cond DISABLE
 #endif
-/// @endcond
 
 #define FINGERPRINT_OK 0x00
 #define FINGERPRINT_PACKETRECIEVEERR 0x01
@@ -144,16 +138,10 @@ private:
   uint8_t recvPacket[20];
 
   Stream *mySerial;
-/// @cond DISABLE
 #if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
-  /// @endcond
   SoftwareSerial *swSerial;
-/// @cond DISABLE
 #endif
-  /// @endcond
   HardwareSerial *hwSerial;
 };
 
-/// @cond DISABLE
 #endif
-/// @endcond
