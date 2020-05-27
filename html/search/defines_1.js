@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['fingerfastsearch',['fingerFastSearch',['../class_adafruit___fingerprint.html#a8507ddc13aa2697779740e5fade9db1a',1,'Adafruit_Fingerprint']]],
-  ['fingerid',['fingerID',['../class_adafruit___fingerprint.html#ad07bc0a05aff5467781e6c87bf1292e9',1,'Adafruit_Fingerprint']]],
   ['fingerprint_5fackpacket',['FINGERPRINT_ACKPACKET',['../_adafruit___fingerprint_8h.html#a0edba97ef9c62420f9ea983888aa83a9',1,'Adafruit_Fingerprint.h']]],
   ['fingerprint_5faddrcode',['FINGERPRINT_ADDRCODE',['../_adafruit___fingerprint_8h.html#ab7df25ec770eb07457c836b740440426',1,'Adafruit_Fingerprint.h']]],
   ['fingerprint_5fbadlocation',['FINGERPRINT_BADLOCATION',['../_adafruit___fingerprint_8h.html#a2cbfa9f337b9aa412d60991a1fdaeeb3',1,'Adafruit_Fingerprint.h']]],
