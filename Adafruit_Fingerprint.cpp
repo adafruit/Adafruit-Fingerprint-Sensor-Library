@@ -32,16 +32,24 @@
 
 #if ARDUINO >= 100
 
-#define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__)
+#define SERIAL_WRITE(...)                                                      \
+  mySerial->write(__VA_ARGS__) //!< Writes to the serial buffer
 #else
 
-#define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__, BYTE)
+#define SERIAL_WRITE(...)                                                      \
+  mySerial->write(__VA_ARGS__, BYTE) //!< Writes to a serial buffer
 #endif
 
+/*!
+ * @brief Writes a 16 bit unsigned integer to the serial buffer
+ */
 #define SERIAL_WRITE_U16(v)                                                    \
   SERIAL_WRITE((uint8_t)(v >> 8));                                             \
   SERIAL_WRITE((uint8_t)(v & 0xFF));
 
+/*!
+ * @brief Gets the command packet
+ */
 #define GET_CMD_PACKET(...)                                                    \
   uint8_t data[] = {__VA_ARGS__};                                              \
   Adafruit_Fingerprint_Packet packet(FINGERPRINT_COMMANDPACKET, sizeof(data),  \
@@ -52,6 +60,9 @@
   if (packet.type != FINGERPRINT_ACKPACKET)                                    \
     return FINGERPRINT_PACKETRECIEVEERR;
 
+/*!
+ * @brief Sends the command packet
+ */
 #define SEND_CMD_PACKET(...)                                                   \
   GET_CMD_PACKET(__VA_ARGS__);                                                 \
   return packet.data[0];
