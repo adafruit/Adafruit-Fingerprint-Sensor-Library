@@ -131,7 +131,6 @@ uint8_t Adafruit_Fingerprint::checkPassword(void) {
     return FINGERPRINT_PACKETRECIEVEERR;
 }
 
-
 uint8_t Adafruit_Fingerprint::getParameters(void) {
   GET_CMD_PACKET(FINGERPRINT_READSYSPARAM);
 
@@ -139,18 +138,23 @@ uint8_t Adafruit_Fingerprint::getParameters(void) {
   system_id = ((uint16_t)packet.data[3] << 8) | packet.data[4];
   capacity = ((uint16_t)packet.data[5] << 8) | packet.data[6];
   security_level = ((uint16_t)packet.data[7] << 8) | packet.data[8];
-  device_addr = ((uint32_t)packet.data[9] << 24) | ((uint32_t)packet.data[10] << 16) | 
-    ((uint32_t)packet.data[11] << 8) | (uint32_t)packet.data[12];
+  device_addr = ((uint32_t)packet.data[9] << 24) |
+                ((uint32_t)packet.data[10] << 16) |
+                ((uint32_t)packet.data[11] << 8) | (uint32_t)packet.data[12];
   packet_len = ((uint16_t)packet.data[13] << 8) | packet.data[14];
-  if (packet_len == 0) { packet_len = 32; }
-  else if (packet_len == 1) { packet_len = 64; }
-  else if (packet_len == 2) { packet_len = 128; }
-  else if (packet_len == 3) { packet_len = 256; }
+  if (packet_len == 0) {
+    packet_len = 32;
+  } else if (packet_len == 1) {
+    packet_len = 64;
+  } else if (packet_len == 2) {
+    packet_len = 128;
+  } else if (packet_len == 3) {
+    packet_len = 256;
+  }
   baud_rate = (((uint16_t)packet.data[15] << 8) | packet.data[16]) * 9600;
 
   return packet.data[0];
 }
-
 
 /**************************************************************************/
 /*!
@@ -288,16 +292,15 @@ uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   return packet.data[0];
 }
 
-
 uint8_t Adafruit_Fingerprint::LEDcontrol(uint8_t control, uint8_t speed,
                                          uint8_t coloridx, uint8_t count) {
-  SEND_CMD_PACKET(FINGERPRINT_AURALEDCONFIG, 
-                  control, speed, coloridx, count);
+  SEND_CMD_PACKET(FINGERPRINT_AURALEDCONFIG, control, speed, coloridx, count);
 }
 
 uint8_t Adafruit_Fingerprint::fingerSearch(uint8_t slot) {
   // search of slot starting thru the capacity
-  GET_CMD_PACKET(FINGERPRINT_SEARCH, slot, 0x00, 0x00, capacity >> 8, capacity & 0xFF);
+  GET_CMD_PACKET(FINGERPRINT_SEARCH, slot, 0x00, 0x00, capacity >> 8,
+                 capacity & 0xFF);
 
   fingerID = 0xFFFF;
   confidence = 0xFFFF;
@@ -369,24 +372,24 @@ void Adafruit_Fingerprint::writeStructuredPacket(
   mySerial->write((uint8_t)(wire_length & 0xFF));
 
 #ifdef FINGERPRINT_DEBUG
-    Serial.print("-> 0x");
-    Serial.print((uint8_t)(packet.start_code >> 8), HEX);
-    Serial.print(", 0x");
-    Serial.print((uint8_t)(packet.start_code & 0xFF), HEX);
-    Serial.print(", 0x");
-    Serial.print(packet.address[0], HEX);
-    Serial.print(", 0x");
-    Serial.print(packet.address[1], HEX);
-    Serial.print(", 0x");
-    Serial.print(packet.address[2], HEX);
-    Serial.print(", 0x");
-    Serial.print(packet.address[3], HEX);
-    Serial.print(", 0x");
-    Serial.print(packet.type, HEX);
-    Serial.print(", 0x");
-    Serial.print((uint8_t)(wire_length >> 8), HEX);
-    Serial.print(", 0x");
-    Serial.print((uint8_t)(wire_length & 0xFF), HEX);
+  Serial.print("-> 0x");
+  Serial.print((uint8_t)(packet.start_code >> 8), HEX);
+  Serial.print(", 0x");
+  Serial.print((uint8_t)(packet.start_code & 0xFF), HEX);
+  Serial.print(", 0x");
+  Serial.print(packet.address[0], HEX);
+  Serial.print(", 0x");
+  Serial.print(packet.address[1], HEX);
+  Serial.print(", 0x");
+  Serial.print(packet.address[2], HEX);
+  Serial.print(", 0x");
+  Serial.print(packet.address[3], HEX);
+  Serial.print(", 0x");
+  Serial.print(packet.type, HEX);
+  Serial.print(", 0x");
+  Serial.print((uint8_t)(wire_length >> 8), HEX);
+  Serial.print(", 0x");
+  Serial.print((uint8_t)(wire_length & 0xFF), HEX);
 #endif
 
   uint16_t sum = ((wire_length) >> 8) + ((wire_length)&0xFF) + packet.type;
@@ -403,10 +406,10 @@ void Adafruit_Fingerprint::writeStructuredPacket(
   mySerial->write((uint8_t)(sum & 0xFF));
 
 #ifdef FINGERPRINT_DEBUG
-    Serial.print(", 0x");
-    Serial.print((uint8_t)(sum >> 8), HEX);
-    Serial.print(", 0x");
-    Serial.println((uint8_t)(sum & 0xFF), HEX);
+  Serial.print(", 0x");
+  Serial.print((uint8_t)(sum >> 8), HEX);
+  Serial.print(", 0x");
+  Serial.println((uint8_t)(sum & 0xFF), HEX);
 #endif
 
   return;
@@ -430,7 +433,7 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
   uint16_t idx = 0, timer = 0;
 
 #ifdef FINGERPRINT_DEBUG
-    Serial.print("<- ");
+  Serial.print("<- ");
 #endif
 
   while (true) {

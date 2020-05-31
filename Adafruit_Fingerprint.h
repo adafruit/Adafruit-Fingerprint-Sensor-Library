@@ -59,14 +59,14 @@
 
 #define FINGERPRINT_GETIMAGE 0x01 //!< Collect finger image
 #define FINGERPRINT_IMAGE2TZ 0x02 //!< Generate character file from image
-#define FINGERPRINT_SEARCH   0x04 //!< Search for fingerprint in slot
+#define FINGERPRINT_SEARCH 0x04   //!< Search for fingerprint in slot
 #define FINGERPRINT_REGMODEL                                                   \
   0x05 //!< Combine character files and generate template
-#define FINGERPRINT_STORE 0x06          //!< Store template
-#define FINGERPRINT_LOAD 0x07           //!< Read/load template
-#define FINGERPRINT_UPLOAD 0x08         //!< Upload template
-#define FINGERPRINT_DELETE 0x0C         //!< Delete templates
-#define FINGERPRINT_EMPTY 0x0D          //!< Empty library
+#define FINGERPRINT_STORE 0x06  //!< Store template
+#define FINGERPRINT_LOAD 0x07   //!< Read/load template
+#define FINGERPRINT_UPLOAD 0x08 //!< Upload template
+#define FINGERPRINT_DELETE 0x0C //!< Delete templates
+#define FINGERPRINT_EMPTY 0x0D  //!< Empty library
 #define FINGERPRINT_READSYSPARAM 0x0F
 #define FINGERPRINT_SETPASSWORD 0x12    //!< Sets passwords
 #define FINGERPRINT_VERIFYPASSWORD 0x13 //!< Verifies the password
@@ -76,16 +76,15 @@
 #define FINGERPRINT_TEMPLATECOUNT 0x1D //!< Read finger template numbers
 #define FINGERPRINT_AURALEDCONFIG 0x35 //!< Aura LED control
 
-
-#define FINGERPRINT_LED_BREATHING  0x01 //!< Breathing light
-#define FINGERPRINT_LED_FLASHING  0x02 //!< Flashing light
-#define FINGERPRINT_LED_ON  0x03 //!< Always on
-#define FINGERPRINT_LED_OFF  0x04 //!< Always off
-#define FINGERPRINT_LED_GRADUAL_ON  0x05 //!< Gradually on
-#define FINGERPRINT_LED_GRADUAL_OFF  0x06 //!< Gradually off
-#define FINGERPRINT_LED_RED 0x01 //!< Red LED
-#define FINGERPRINT_LED_BLUE 0x02 //!< Blue LED
-#define FINGERPRINT_LED_PURPLE 0x03 //!< Purple LED
+#define FINGERPRINT_LED_BREATHING 0x01   //!< Breathing light
+#define FINGERPRINT_LED_FLASHING 0x02    //!< Flashing light
+#define FINGERPRINT_LED_ON 0x03          //!< Always on
+#define FINGERPRINT_LED_OFF 0x04         //!< Always off
+#define FINGERPRINT_LED_GRADUAL_ON 0x05  //!< Gradually on
+#define FINGERPRINT_LED_GRADUAL_OFF 0x06 //!< Gradually off
+#define FINGERPRINT_LED_RED 0x01         //!< Red LED
+#define FINGERPRINT_LED_BLUE 0x02        //!< Blue LED
+#define FINGERPRINT_LED_PURPLE 0x03      //!< Purple LED
 
 //#define FINGERPRINT_DEBUG
 
@@ -147,11 +146,11 @@ public:
   uint8_t getModel(void);
   uint8_t deleteModel(uint16_t id);
   uint8_t fingerFastSearch(void);
-  uint8_t fingerSearch(uint8_t slot=1);
+  uint8_t fingerSearch(uint8_t slot = 1);
   uint8_t getTemplateCount(void);
   uint8_t setPassword(uint32_t password);
-  uint8_t LEDcontrol(uint8_t control, uint8_t speed,
-                     uint8_t coloridx, uint8_t count=0);
+  uint8_t LEDcontrol(uint8_t control, uint8_t speed, uint8_t coloridx,
+                     uint8_t count = 0);
 
   void writeStructuredPacket(const Adafruit_Fingerprint_Packet &p);
   uint8_t getStructuredPacket(Adafruit_Fingerprint_Packet *p,
