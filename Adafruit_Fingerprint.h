@@ -45,7 +45,6 @@
 #define FINGERPRINT_INVALIDREG 0x1A //!< Invalid register number
 #define FINGERPRINT_ADDRCODE 0x20   //!< Address code
 #define FINGERPRINT_PASSVERIFY 0x21 //!< Verify the fingerprint passed
-
 #define FINGERPRINT_STARTCODE                                                  \
   0xEF01 //!< Fixed falue of EF01H; High byte transferred first
 
@@ -60,6 +59,7 @@
 
 #define FINGERPRINT_GETIMAGE 0x01 //!< Collect finger image
 #define FINGERPRINT_IMAGE2TZ 0x02 //!< Generate character file from image
+#define FINGERPRINT_SEARCH   0x04 //!< Search for fingerprint in slot
 #define FINGERPRINT_REGMODEL                                                   \
   0x05 //!< Combine character files and generate template
 #define FINGERPRINT_STORE 0x06          //!< Store template
@@ -67,6 +67,7 @@
 #define FINGERPRINT_UPLOAD 0x08         //!< Upload template
 #define FINGERPRINT_DELETE 0x0C         //!< Delete templates
 #define FINGERPRINT_EMPTY 0x0D          //!< Empty library
+#define FINGERPRINT_READSYSPARAM 0x0F
 #define FINGERPRINT_SETPASSWORD 0x12    //!< Sets passwords
 #define FINGERPRINT_VERIFYPASSWORD 0x13 //!< Verifies the password
 #define FINGERPRINT_HISPEEDSEARCH                                              \
@@ -122,6 +123,8 @@ public:
   void begin(uint32_t baud);
 
   boolean verifyPassword(void);
+  uint8_t getParameters(void);
+
   uint8_t getImage(void);
   uint8_t image2Tz(uint8_t slot = 1);
   uint8_t createModel(void);
@@ -132,6 +135,7 @@ public:
   uint8_t getModel(void);
   uint8_t deleteModel(uint16_t id);
   uint8_t fingerFastSearch(void);
+  uint8_t fingerSearch(uint8_t slot=1);
   uint8_t getTemplateCount(void);
   uint8_t setPassword(uint32_t password);
   void writeStructuredPacket(const Adafruit_Fingerprint_Packet &p);
@@ -145,6 +149,14 @@ public:
   uint16_t confidence;
   /// The number of stored templates in the sensor, set by getTemplateCount()
   uint16_t templateCount;
+
+  uint16_t status_reg = 0x0;
+  uint16_t system_id = 0x0;
+  uint16_t capacity = 64;
+  uint16_t security_level = 0;
+  uint32_t device_addr = 0xFFFFFFFF;
+  uint16_t packet_len = 64;
+  uint16_t baud_rate = 57600;
 
 private:
   uint8_t checkPassword(void);
