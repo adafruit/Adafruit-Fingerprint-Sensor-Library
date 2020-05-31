@@ -62,12 +62,12 @@
 #define FINGERPRINT_SEARCH 0x04   //!< Search for fingerprint in slot
 #define FINGERPRINT_REGMODEL                                                   \
   0x05 //!< Combine character files and generate template
-#define FINGERPRINT_STORE 0x06  //!< Store template
-#define FINGERPRINT_LOAD 0x07   //!< Read/load template
-#define FINGERPRINT_UPLOAD 0x08 //!< Upload template
-#define FINGERPRINT_DELETE 0x0C //!< Delete templates
-#define FINGERPRINT_EMPTY 0x0D  //!< Empty library
-#define FINGERPRINT_READSYSPARAM 0x0F
+#define FINGERPRINT_STORE 0x06          //!< Store template
+#define FINGERPRINT_LOAD 0x07           //!< Read/load template
+#define FINGERPRINT_UPLOAD 0x08         //!< Upload template
+#define FINGERPRINT_DELETE 0x0C         //!< Delete templates
+#define FINGERPRINT_EMPTY 0x0D          //!< Empty library
+#define FINGERPRINT_READSYSPARAM 0x0F   //!< Read system parameters
 #define FINGERPRINT_SETPASSWORD 0x12    //!< Sets passwords
 #define FINGERPRINT_VERIFYPASSWORD 0x13 //!< Verifies the password
 #define FINGERPRINT_HISPEEDSEARCH                                              \
@@ -164,13 +164,14 @@ public:
   /// The number of stored templates in the sensor, set by getTemplateCount()
   uint16_t templateCount;
 
-  uint16_t status_reg = 0x0;
-  uint16_t system_id = 0x0;
-  uint16_t capacity = 64;
-  uint16_t security_level = 0;
-  uint32_t device_addr = 0xFFFFFFFF;
-  uint16_t packet_len = 64;
-  uint16_t baud_rate = 57600;
+  uint16_t status_reg = 0x0; ///< The status register (set by getParameters)
+  uint16_t system_id = 0x0;  ///< The system identifier (set by getParameters)
+  uint16_t capacity = 64; ///< The fingerprint capacity (set by getParameters)
+  uint16_t security_level = 0; ///< The security level (set by getParameters)
+  uint32_t device_addr =
+      0xFFFFFFFF;             ///< The device address (set by getParameters)
+  uint16_t packet_len = 64;   ///< The max packet length (set by getParameters)
+  uint16_t baud_rate = 57600; ///< The UART baud rate (set by getParameters)
 
 private:
   uint8_t checkPassword(void);

@@ -131,6 +131,14 @@ uint8_t Adafruit_Fingerprint::checkPassword(void) {
     return FINGERPRINT_PACKETRECIEVEERR;
 }
 
+/**************************************************************************/
+/*!
+    @brief  Get the sensors parameters, fills in the member variables
+    status_reg, system_id, capacity, security_level, device_addr, packet_len
+    and baud_rate
+    @returns True if password is correct
+*/
+/**************************************************************************/
 uint8_t Adafruit_Fingerprint::getParameters(void) {
   GET_CMD_PACKET(FINGERPRINT_READSYSPARAM);
 
@@ -292,11 +300,35 @@ uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   return packet.data[0];
 }
 
+/**************************************************************************/
+/*!
+    @brief   Control the built in LED (if exists). Check datasheet/manual
+    for different colors and control codes available
+    @param control The control code (e.g. breathing, full on)
+    @param speed How fast to go through the breathing/blinking cycles
+    @param coloridx What color to light the indicator
+    @param count How many repeats of blinks/breathing cycles
+    @returns <code>FINGERPRINT_OK</code> on fingerprint match success
+    @returns <code>FINGERPRINT_NOTFOUND</code> no match made
+    @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
+*/
+/**************************************************************************/
 uint8_t Adafruit_Fingerprint::LEDcontrol(uint8_t control, uint8_t speed,
                                          uint8_t coloridx, uint8_t count) {
   SEND_CMD_PACKET(FINGERPRINT_AURALEDCONFIG, control, speed, coloridx, count);
 }
 
+/**************************************************************************/
+/*!
+    @brief   Ask the sensor to search the current slot fingerprint features to
+   match saved templates. The matching location is stored in <b>fingerID</b> and
+   the matching confidence in <b>confidence</b>
+   @param slot The slot to use for the print search, defaults to 1
+    @returns <code>FINGERPRINT_OK</code> on fingerprint match success
+    @returns <code>FINGERPRINT_NOTFOUND</code> no match made
+    @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
+*/
+/**************************************************************************/
 uint8_t Adafruit_Fingerprint::fingerSearch(uint8_t slot) {
   // search of slot starting thru the capacity
   GET_CMD_PACKET(FINGERPRINT_SEARCH, slot, 0x00, 0x00, capacity >> 8,
