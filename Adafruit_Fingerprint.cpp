@@ -1,33 +1,55 @@
-/***************************************************
-  This is a library for our optical Fingerprint sensor
-
-  Designed specifically to work with the Adafruit Fingerprint sensor
-  ----> http://www.adafruit.com/products/751
-
-  These displays use TTL Serial to communicate, 2 pins are required to
-  interface
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-
-  Written by Limor Fried/Ladyada for Adafruit Industries.
-  BSD license, all text above must be included in any redistribution
- ****************************************************/
+/*!
+ * @file Adafruit_Fingerprint.cpp
+ *
+ * @mainpage Adafruit Fingerprint Sensor Library
+ *
+ * @section intro_sec Introduction
+ *
+ * This is a library for our optical Fingerprint sensor
+ *
+ * Designed specifically to work with the Adafruit Fingerprint sensor
+ * ----> http://www.adafruit.com/products/751
+ *
+ * These displays use TTL Serial to communicate, 2 pins are required to
+ * interface
+ * Adafruit invests time and resources providing this open source code,
+ * please support Adafruit and open-source hardware by purchasing
+ * products from Adafruit!
+ *
+ * @section author Author
+ *
+ * Written by Limor Fried/Ladyada for Adafruit Industries.
+ *
+ * @section license License
+ *
+ * BSD license, all text above must be included in any redistribution
+ *
+ */
 
 #include "Adafruit_Fingerprint.h"
 
 //#define FINGERPRINT_DEBUG
 
 #if ARDUINO >= 100
-#define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__)
+
+#define SERIAL_WRITE(...)                                                      \
+  mySerial->write(__VA_ARGS__) //!< Writes to the serial buffer
 #else
-#define SERIAL_WRITE(...) mySerial->write(__VA_ARGS__, BYTE)
+
+#define SERIAL_WRITE(...)                                                      \
+  mySerial->write(__VA_ARGS__, BYTE) //!< Writes to a serial buffer
 #endif
 
+/*!
+ * @brief Writes a 16 bit unsigned integer to the serial buffer
+ */
 #define SERIAL_WRITE_U16(v)                                                    \
   SERIAL_WRITE((uint8_t)(v >> 8));                                             \
   SERIAL_WRITE((uint8_t)(v & 0xFF));
 
+/*!
+ * @brief Gets the command packet
+ */
 #define GET_CMD_PACKET(...)                                                    \
   uint8_t data[] = {__VA_ARGS__};                                              \
   Adafruit_Fingerprint_Packet packet(FINGERPRINT_COMMANDPACKET, sizeof(data),  \
@@ -38,6 +60,9 @@
   if (packet.type != FINGERPRINT_ACKPACKET)                                    \
     return FINGERPRINT_PACKETRECIEVEERR;
 
+/*!
+ * @brief Sends the command packet
+ */
 #define SEND_CMD_PACKET(...)                                                   \
   GET_CMD_PACKET(__VA_ARGS__);                                                 \
   return packet.data[0];
