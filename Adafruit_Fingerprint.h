@@ -74,6 +74,18 @@
   0x1B //!< Asks the sensor to search for a matching fingerprint template to the
        //!< last model generated
 #define FINGERPRINT_TEMPLATECOUNT 0x1D //!< Read finger template numbers
+#define FINGERPRINT_AURALEDCONFIG 0x35 //!< Aura LED control
+
+
+#define FINGERPRINT_LED_BREATHING  0x01 //!< Breathing light
+#define FINGERPRINT_LED_FLASHING  0x02 //!< Flashing light
+#define FINGERPRINT_LED_ON  0x03 //!< Always on
+#define FINGERPRINT_LED_OFF  0x04 //!< Always off
+#define FINGERPRINT_LED_GRADUAL_ON  0x05 //!< Gradually on
+#define FINGERPRINT_LED_GRADUAL_OFF  0x06 //!< Gradually off
+#define FINGERPRINT_LED_RED 0x01 //!< Red LED
+#define FINGERPRINT_LED_BLUE 0x02 //!< Blue LED
+#define FINGERPRINT_LED_PURPLE 0x03 //!< Purple LED
 
 //#define FINGERPRINT_DEBUG
 
@@ -138,6 +150,9 @@ public:
   uint8_t fingerSearch(uint8_t slot=1);
   uint8_t getTemplateCount(void);
   uint8_t setPassword(uint32_t password);
+  uint8_t LEDcontrol(uint8_t control, uint8_t speed,
+                     uint8_t coloridx, uint8_t count=0);
+
   void writeStructuredPacket(const Adafruit_Fingerprint_Packet &p);
   uint8_t getStructuredPacket(Adafruit_Fingerprint_Packet *p,
                               uint16_t timeout = DEFAULTTIMEOUT);

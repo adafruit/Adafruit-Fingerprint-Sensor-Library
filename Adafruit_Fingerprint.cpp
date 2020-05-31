@@ -28,7 +28,7 @@
 
 #include "Adafruit_Fingerprint.h"
 
-#define FINGERPRINT_DEBUG
+//#define FINGERPRINT_DEBUG
 
 /*!
  * @brief Gets the command packet
@@ -288,6 +288,12 @@ uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   return packet.data[0];
 }
 
+
+uint8_t Adafruit_Fingerprint::LEDcontrol(uint8_t control, uint8_t speed,
+                                         uint8_t coloridx, uint8_t count) {
+  SEND_CMD_PACKET(FINGERPRINT_AURALEDCONFIG, 
+                  control, speed, coloridx, count);
+}
 
 uint8_t Adafruit_Fingerprint::fingerSearch(uint8_t slot) {
   // search of slot starting thru the capacity
