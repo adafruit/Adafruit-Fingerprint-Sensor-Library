@@ -208,5 +208,7 @@ uint8_t getFingerprintEnroll() {
   } else {
     Serial.println("Unknown error");
     return p;
-  }   
+  }
+
+  return true;
 }
