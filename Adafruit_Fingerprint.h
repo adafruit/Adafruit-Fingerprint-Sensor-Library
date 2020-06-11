@@ -127,9 +127,9 @@ public:
   boolean verifyPassword(void);
   uint8_t getImage(void);
   uint8_t image2Tz(uint8_t slot = 1);
-  uint8_t createModel(void);
   uint8_t OpenLED(void);
   uint8_t CloseLED(void);
+  uint8_t createModel(void);
 
   uint8_t emptyDatabase(void);
   uint8_t storeModel(uint16_t id);
