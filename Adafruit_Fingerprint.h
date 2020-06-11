@@ -78,6 +78,9 @@
 
 #define DEFAULTTIMEOUT 1000 //!< UART reading timeout in milliseconds
 
+#define FINGERPRINT_OPENLED 0x50
+#define FINGERPRINT_CLOSELED 0x51
+
 ///! Helper class to craft UART packets
 struct Adafruit_Fingerprint_Packet {
 
@@ -125,6 +128,8 @@ public:
   uint8_t getImage(void);
   uint8_t image2Tz(uint8_t slot = 1);
   uint8_t createModel(void);
+  uint8_t OpenLED(void);
+  uint8_t CloseLED(void);
 
   uint8_t emptyDatabase(void);
   uint8_t storeModel(uint16_t id);
