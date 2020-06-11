@@ -184,7 +184,6 @@ uint8_t Adafruit_Fingerprint::image2Tz(uint8_t slot) {
     @returns <code>FINGERPRINT_OK</code> on success
     @returns anything else for operation failed
 */
-/**************************************************************************/
 uint8_t Adafruit_Fingerprint::OpenLED(void) {
   SEND_CMD_PACKET(FINGERPRINT_OPENLED);
 }
@@ -195,7 +194,6 @@ uint8_t Adafruit_Fingerprint::OpenLED(void) {
     @returns <code>FINGERPRINT_OK</code> on success
     @returns anything else for operation failed
 */
-/**************************************************************************/
 uint8_t Adafruit_Fingerprint::CloseLED(void) {
   SEND_CMD_PACKET(FINGERPRINT_CLOSELED);
 }
