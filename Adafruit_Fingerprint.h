@@ -78,8 +78,8 @@
 
 #define DEFAULTTIMEOUT 1000 //!< UART reading timeout in milliseconds
 
-#define FINGERPRINT_OPENLED 0x50
-#define FINGERPRINT_CLOSELED 0x51
+#define FINGERPRINT_OPENLED 0x50 //!< Turn on the onboard LED
+#define FINGERPRINT_CLOSELED 0x51 //!< Turn off the onboard LED
 
 ///! Helper class to craft UART packets
 struct Adafruit_Fingerprint_Packet {
