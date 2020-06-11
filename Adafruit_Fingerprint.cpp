@@ -178,7 +178,6 @@ uint8_t Adafruit_Fingerprint::image2Tz(uint8_t slot) {
   SEND_CMD_PACKET(FINGERPRINT_IMAGE2TZ, slot);
 }
 
-// Custom function
 /**************************************************************************/
 /*!
     @brief   Ask the sensor to turn on the LED
@@ -190,7 +189,6 @@ uint8_t Adafruit_Fingerprint::OpenLED(void) {
   SEND_CMD_PACKET(FINGERPRINT_OPENLED);
 }
 
-// Custom function
 /**************************************************************************/
 /*!
     @brief   Ask the sensor to turn off the LED
