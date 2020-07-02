@@ -68,6 +68,13 @@ $(function() {
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a76eea33d684ad9e571fc08b7a948d7f0"><td class="memItemLeft" align="right" valign="top"><a id="a76eea33d684ad9e571fc08b7a948d7f0"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_adafruit___fingerprint_8cpp.html#a76eea33d684ad9e571fc08b7a948d7f0">SERIAL_WRITE</a>(...)&#160;&#160;&#160;mySerial-&gt;write(__VA_ARGS__, BYTE)</td></tr>
+<tr class="memdesc:a76eea33d684ad9e571fc08b7a948d7f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes to a serial buffer. <br /></td></tr>
+<tr class="separator:a76eea33d684ad9e571fc08b7a948d7f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ff9c2d135ffe16fda7c88e9ede3fd68"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_adafruit___fingerprint_8cpp.html#a7ff9c2d135ffe16fda7c88e9ede3fd68">SERIAL_WRITE_U16</a>(v)</td></tr>
+<tr class="memdesc:a7ff9c2d135ffe16fda7c88e9ede3fd68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a 16 bit unsigned integer to the serial buffer.  <a href="#a7ff9c2d135ffe16fda7c88e9ede3fd68">More...</a><br /></td></tr>
+<tr class="separator:a7ff9c2d135ffe16fda7c88e9ede3fd68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a991138836423734c50ffa2268c4d8510"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_adafruit___fingerprint_8cpp.html#a991138836423734c50ffa2268c4d8510">GET_CMD_PACKET</a>(...)</td></tr>
 <tr class="memdesc:a991138836423734c50ffa2268c4d8510"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the command packet.  <a href="#a991138836423734c50ffa2268c4d8510">More...</a><br /></td></tr>
 <tr class="separator:a991138836423734c50ffa2268c4d8510"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -76,6 +83,27 @@ Macros</h2></td></tr>
 <tr class="separator:a8906d9aecdbb4d82f31b7696e58bcc40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a7ff9c2d135ffe16fda7c88e9ede3fd68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ff9c2d135ffe16fda7c88e9ede3fd68">&#9670;&nbsp;</a></span>SERIAL_WRITE_U16</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SERIAL_WRITE_U16</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">v</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="_adafruit___fingerprint_8cpp.html#a76eea33d684ad9e571fc08b7a948d7f0">SERIAL_WRITE</a>((uint8_t)(v &gt;&gt; 8));                                             \</div><div class="line">  SERIAL_WRITE((uint8_t)(v &amp; 0xFF));</div><div class="ttc" id="_adafruit___fingerprint_8cpp_html_a76eea33d684ad9e571fc08b7a948d7f0"><div class="ttname"><a href="_adafruit___fingerprint_8cpp.html#a76eea33d684ad9e571fc08b7a948d7f0">SERIAL_WRITE</a></div><div class="ttdeci">#define SERIAL_WRITE(...)</div><div class="ttdoc">Writes to a serial buffer. </div><div class="ttdef"><b>Definition:</b> Adafruit_Fingerprint.cpp:39</div></div>
+</div><!-- fragment -->
+<p>Writes a 16 bit unsigned integer to the serial buffer. </p>
+
+</div>
+</div>
 <a id="a991138836423734c50ffa2268c4d8510"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a991138836423734c50ffa2268c4d8510">&#9670;&nbsp;</a></span>GET_CMD_PACKET</h2>
 
@@ -91,8 +119,8 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">uint8_t data[] = {__VA_ARGS__};                                              \</div><div class="line">  Adafruit_Fingerprint_Packet packet(<a class="code" href="_adafruit___fingerprint_8h.html#a1d113e8096cd0953a86db7b0a4459db7">FINGERPRINT_COMMANDPACKET</a>, <span class="keyword">sizeof</span>(data),  \</div><div class="line">                                     data);                                    \</div><div class="line">  writeStructuredPacket(packet);                                               \</div><div class="line">  if (getStructuredPacket(&amp;packet) != <a class="code" href="_adafruit___fingerprint_8h.html#a77d27bf3668452ce7a62d393abdaf2c3">FINGERPRINT_OK</a>)                          \</div><div class="line">    return <a class="code" href="_adafruit___fingerprint_8h.html#ae6ba6a96896d67a4d5068affc1d9b99a">FINGERPRINT_PACKETRECIEVEERR</a>;                                       \</div><div class="line">  if (packet.type != <a class="code" href="_adafruit___fingerprint_8h.html#a0edba97ef9c62420f9ea983888aa83a9">FINGERPRINT_ACKPACKET</a>)                                    \</div><div class="line">    return <a class="code" href="_adafruit___fingerprint_8h.html#ae6ba6a96896d67a4d5068affc1d9b99a">FINGERPRINT_PACKETRECIEVEERR</a>;</div><div class="ttc" id="_adafruit___fingerprint_8h_html_a1d113e8096cd0953a86db7b0a4459db7"><div class="ttname"><a href="_adafruit___fingerprint_8h.html#a1d113e8096cd0953a86db7b0a4459db7">FINGERPRINT_COMMANDPACKET</a></div><div class="ttdeci">#define FINGERPRINT_COMMANDPACKET</div><div class="ttdoc">Command packet. </div><div class="ttdef"><b>Definition:</b> Adafruit_Fingerprint.h:51</div></div>
-<div class="ttc" id="_adafruit___fingerprint_8h_html_a0edba97ef9c62420f9ea983888aa83a9"><div class="ttname"><a href="_adafruit___fingerprint_8h.html#a0edba97ef9c62420f9ea983888aa83a9">FINGERPRINT_ACKPACKET</a></div><div class="ttdeci">#define FINGERPRINT_ACKPACKET</div><div class="ttdoc">Acknowledge packet. </div><div class="ttdef"><b>Definition:</b> Adafruit_Fingerprint.h:54</div></div>
+<b>Value:</b><div class="fragment"><div class="line">uint8_t data[] = {__VA_ARGS__};                                              \</div><div class="line">  Adafruit_Fingerprint_Packet packet(<a class="code" href="_adafruit___fingerprint_8h.html#a1d113e8096cd0953a86db7b0a4459db7">FINGERPRINT_COMMANDPACKET</a>, <span class="keyword">sizeof</span>(data),  \</div><div class="line">                                     data);                                    \</div><div class="line">  writeStructuredPacket(packet);                                               \</div><div class="line">  if (getStructuredPacket(&amp;packet) != <a class="code" href="_adafruit___fingerprint_8h.html#a77d27bf3668452ce7a62d393abdaf2c3">FINGERPRINT_OK</a>)                          \</div><div class="line">    return <a class="code" href="_adafruit___fingerprint_8h.html#ae6ba6a96896d67a4d5068affc1d9b99a">FINGERPRINT_PACKETRECIEVEERR</a>;                                       \</div><div class="line">  if (packet.type != <a class="code" href="_adafruit___fingerprint_8h.html#a0edba97ef9c62420f9ea983888aa83a9">FINGERPRINT_ACKPACKET</a>)                                    \</div><div class="line">    return <a class="code" href="_adafruit___fingerprint_8h.html#ae6ba6a96896d67a4d5068affc1d9b99a">FINGERPRINT_PACKETRECIEVEERR</a>;</div><div class="ttc" id="_adafruit___fingerprint_8h_html_a1d113e8096cd0953a86db7b0a4459db7"><div class="ttname"><a href="_adafruit___fingerprint_8h.html#a1d113e8096cd0953a86db7b0a4459db7">FINGERPRINT_COMMANDPACKET</a></div><div class="ttdeci">#define FINGERPRINT_COMMANDPACKET</div><div class="ttdoc">Command packet. </div><div class="ttdef"><b>Definition:</b> Adafruit_Fingerprint.h:52</div></div>
+<div class="ttc" id="_adafruit___fingerprint_8h_html_a0edba97ef9c62420f9ea983888aa83a9"><div class="ttname"><a href="_adafruit___fingerprint_8h.html#a0edba97ef9c62420f9ea983888aa83a9">FINGERPRINT_ACKPACKET</a></div><div class="ttdeci">#define FINGERPRINT_ACKPACKET</div><div class="ttdoc">Acknowledge packet. </div><div class="ttdef"><b>Definition:</b> Adafruit_Fingerprint.h:55</div></div>
 <div class="ttc" id="_adafruit___fingerprint_8h_html_ae6ba6a96896d67a4d5068affc1d9b99a"><div class="ttname"><a href="_adafruit___fingerprint_8h.html#ae6ba6a96896d67a4d5068affc1d9b99a">FINGERPRINT_PACKETRECIEVEERR</a></div><div class="ttdeci">#define FINGERPRINT_PACKETRECIEVEERR</div><div class="ttdoc">Error when receiving data package. </div><div class="ttdef"><b>Definition:</b> Adafruit_Fingerprint.h:17</div></div>
 <div class="ttc" id="_adafruit___fingerprint_8h_html_a77d27bf3668452ce7a62d393abdaf2c3"><div class="ttname"><a href="_adafruit___fingerprint_8h.html#a77d27bf3668452ce7a62d393abdaf2c3">FINGERPRINT_OK</a></div><div class="ttdeci">#define FINGERPRINT_OK</div><div class="ttdoc">Command execution is complete. </div><div class="ttdef"><b>Definition:</b> Adafruit_Fingerprint.h:16</div></div>
 </div><!-- fragment -->
@@ -115,7 +143,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="_adafruit___fingerprint_8cpp.html#a991138836423734c50ffa2268c4d8510">GET_CMD_PACKET</a>(__VA_ARGS__);                                                 \</div><div class="line">  return packet.data[0];</div><div class="ttc" id="_adafruit___fingerprint_8cpp_html_a991138836423734c50ffa2268c4d8510"><div class="ttname"><a href="_adafruit___fingerprint_8cpp.html#a991138836423734c50ffa2268c4d8510">GET_CMD_PACKET</a></div><div class="ttdeci">#define GET_CMD_PACKET(...)</div><div class="ttdoc">Gets the command packet. </div><div class="ttdef"><b>Definition:</b> Adafruit_Fingerprint.cpp:36</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="_adafruit___fingerprint_8cpp.html#a991138836423734c50ffa2268c4d8510">GET_CMD_PACKET</a>(__VA_ARGS__);                                                 \</div><div class="line">  return packet.data[0];</div><div class="ttc" id="_adafruit___fingerprint_8cpp_html_a991138836423734c50ffa2268c4d8510"><div class="ttname"><a href="_adafruit___fingerprint_8cpp.html#a991138836423734c50ffa2268c4d8510">GET_CMD_PACKET</a></div><div class="ttdeci">#define GET_CMD_PACKET(...)</div><div class="ttdoc">Gets the command packet. </div><div class="ttdef"><b>Definition:</b> Adafruit_Fingerprint.cpp:54</div></div>
 </div><!-- fragment -->
 <p>Sends the command packet. </p>
 
