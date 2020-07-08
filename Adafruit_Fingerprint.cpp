@@ -300,9 +300,26 @@ uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   return packet.data[0];
 }
 
+
 /**************************************************************************/
 /*!
-    @brief   Control the built in LED (if exists). Check datasheet/manual
+    @brief   Control the built in LED 
+    @param on True if you want LED on, False to turn LED off
+    @returns <code>FINGERPRINT_OK</code> on success
+*/
+/**************************************************************************/
+uint8_t Adafruit_Fingerprint::LEDcontrol(bool on) {
+  if (on) {
+    SEND_CMD_PACKET(FINGERPRINT_LEDON);
+  } else {
+    SEND_CMD_PACKET(FINGERPRINT_LEDOFF);
+  }
+}
+
+
+/**************************************************************************/
+/*!
+    @brief   Control the built in Aura LED (if exists). Check datasheet/manual
     for different colors and control codes available
     @param control The control code (e.g. breathing, full on)
     @param speed How fast to go through the breathing/blinking cycles
