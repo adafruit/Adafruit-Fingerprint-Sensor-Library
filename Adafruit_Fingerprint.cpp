@@ -300,10 +300,9 @@ uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   return packet.data[0];
 }
 
-
 /**************************************************************************/
 /*!
-    @brief   Control the built in LED 
+    @brief   Control the built in LED
     @param on True if you want LED on, False to turn LED off
     @returns <code>FINGERPRINT_OK</code> on success
 */
@@ -315,7 +314,6 @@ uint8_t Adafruit_Fingerprint::LEDcontrol(bool on) {
     SEND_CMD_PACKET(FINGERPRINT_LEDOFF);
   }
 }
-
 
 /**************************************************************************/
 /*!
