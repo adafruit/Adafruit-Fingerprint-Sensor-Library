@@ -30,23 +30,6 @@
 
 //#define FINGERPRINT_DEBUG
 
-#if ARDUINO >= 100
-
-#define SERIAL_WRITE(...)                                                      \
-  mySerial->write(__VA_ARGS__) //!< Writes to the serial buffer
-#else
-
-#define SERIAL_WRITE(...)                                                      \
-  mySerial->write(__VA_ARGS__, BYTE) //!< Writes to a serial buffer
-#endif
-
-/*!
- * @brief Writes a 16 bit unsigned integer to the serial buffer
- */
-#define SERIAL_WRITE_U16(v)                                                    \
-  SERIAL_WRITE((uint8_t)(v >> 8));                                             \
-  SERIAL_WRITE((uint8_t)(v & 0xFF));
-
 /*!
  * @brief Gets the command packet
  */
@@ -146,6 +129,39 @@ uint8_t Adafruit_Fingerprint::checkPassword(void) {
     return FINGERPRINT_OK;
   else
     return FINGERPRINT_PACKETRECIEVEERR;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Get the sensors parameters, fills in the member variables
+    status_reg, system_id, capacity, security_level, device_addr, packet_len
+    and baud_rate
+    @returns True if password is correct
+*/
+/**************************************************************************/
+uint8_t Adafruit_Fingerprint::getParameters(void) {
+  GET_CMD_PACKET(FINGERPRINT_READSYSPARAM);
+
+  status_reg = ((uint16_t)packet.data[1] << 8) | packet.data[2];
+  system_id = ((uint16_t)packet.data[3] << 8) | packet.data[4];
+  capacity = ((uint16_t)packet.data[5] << 8) | packet.data[6];
+  security_level = ((uint16_t)packet.data[7] << 8) | packet.data[8];
+  device_addr = ((uint32_t)packet.data[9] << 24) |
+                ((uint32_t)packet.data[10] << 16) |
+                ((uint32_t)packet.data[11] << 8) | (uint32_t)packet.data[12];
+  packet_len = ((uint16_t)packet.data[13] << 8) | packet.data[14];
+  if (packet_len == 0) {
+    packet_len = 32;
+  } else if (packet_len == 1) {
+    packet_len = 64;
+  } else if (packet_len == 2) {
+    packet_len = 128;
+  } else if (packet_len == 3) {
+    packet_len = 256;
+  }
+  baud_rate = (((uint16_t)packet.data[15] << 8) | packet.data[16]) * 9600;
+
+  return packet.data[0];
 }
 
 /**************************************************************************/
@@ -286,6 +302,69 @@ uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
 
 /**************************************************************************/
 /*!
+    @brief   Control the built in LED
+    @param on True if you want LED on, False to turn LED off
+    @returns <code>FINGERPRINT_OK</code> on success
+*/
+/**************************************************************************/
+uint8_t Adafruit_Fingerprint::LEDcontrol(bool on) {
+  if (on) {
+    SEND_CMD_PACKET(FINGERPRINT_LEDON);
+  } else {
+    SEND_CMD_PACKET(FINGERPRINT_LEDOFF);
+  }
+}
+
+/**************************************************************************/
+/*!
+    @brief   Control the built in Aura LED (if exists). Check datasheet/manual
+    for different colors and control codes available
+    @param control The control code (e.g. breathing, full on)
+    @param speed How fast to go through the breathing/blinking cycles
+    @param coloridx What color to light the indicator
+    @param count How many repeats of blinks/breathing cycles
+    @returns <code>FINGERPRINT_OK</code> on fingerprint match success
+    @returns <code>FINGERPRINT_NOTFOUND</code> no match made
+    @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
+*/
+/**************************************************************************/
+uint8_t Adafruit_Fingerprint::LEDcontrol(uint8_t control, uint8_t speed,
+                                         uint8_t coloridx, uint8_t count) {
+  SEND_CMD_PACKET(FINGERPRINT_AURALEDCONFIG, control, speed, coloridx, count);
+}
+
+/**************************************************************************/
+/*!
+    @brief   Ask the sensor to search the current slot fingerprint features to
+   match saved templates. The matching location is stored in <b>fingerID</b> and
+   the matching confidence in <b>confidence</b>
+   @param slot The slot to use for the print search, defaults to 1
+    @returns <code>FINGERPRINT_OK</code> on fingerprint match success
+    @returns <code>FINGERPRINT_NOTFOUND</code> no match made
+    @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
+*/
+/**************************************************************************/
+uint8_t Adafruit_Fingerprint::fingerSearch(uint8_t slot) {
+  // search of slot starting thru the capacity
+  GET_CMD_PACKET(FINGERPRINT_SEARCH, slot, 0x00, 0x00, capacity >> 8,
+                 capacity & 0xFF);
+
+  fingerID = 0xFFFF;
+  confidence = 0xFFFF;
+
+  fingerID = packet.data[1];
+  fingerID <<= 8;
+  fingerID |= packet.data[2];
+
+  confidence = packet.data[3];
+  confidence <<= 8;
+  confidence |= packet.data[4];
+
+  return packet.data[0];
+}
+
+/**************************************************************************/
+/*!
     @brief   Ask the sensor for the number of templates stored in memory. The
    number is stored in <b>templateCount</b> on success.
     @returns <code>FINGERPRINT_OK</code> on success
@@ -326,23 +405,60 @@ uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
 
 void Adafruit_Fingerprint::writeStructuredPacket(
     const Adafruit_Fingerprint_Packet &packet) {
-  SERIAL_WRITE_U16(packet.start_code);
-  SERIAL_WRITE(packet.address[0]);
-  SERIAL_WRITE(packet.address[1]);
-  SERIAL_WRITE(packet.address[2]);
-  SERIAL_WRITE(packet.address[3]);
-  SERIAL_WRITE(packet.type);
+
+  mySerial->write((uint8_t)(packet.start_code >> 8));
+  mySerial->write((uint8_t)(packet.start_code & 0xFF));
+  mySerial->write(packet.address[0]);
+  mySerial->write(packet.address[1]);
+  mySerial->write(packet.address[2]);
+  mySerial->write(packet.address[3]);
+  mySerial->write(packet.type);
 
   uint16_t wire_length = packet.length + 2;
-  SERIAL_WRITE_U16(wire_length);
+  mySerial->write((uint8_t)(wire_length >> 8));
+  mySerial->write((uint8_t)(wire_length & 0xFF));
+
+#ifdef FINGERPRINT_DEBUG
+  Serial.print("-> 0x");
+  Serial.print((uint8_t)(packet.start_code >> 8), HEX);
+  Serial.print(", 0x");
+  Serial.print((uint8_t)(packet.start_code & 0xFF), HEX);
+  Serial.print(", 0x");
+  Serial.print(packet.address[0], HEX);
+  Serial.print(", 0x");
+  Serial.print(packet.address[1], HEX);
+  Serial.print(", 0x");
+  Serial.print(packet.address[2], HEX);
+  Serial.print(", 0x");
+  Serial.print(packet.address[3], HEX);
+  Serial.print(", 0x");
+  Serial.print(packet.type, HEX);
+  Serial.print(", 0x");
+  Serial.print((uint8_t)(wire_length >> 8), HEX);
+  Serial.print(", 0x");
+  Serial.print((uint8_t)(wire_length & 0xFF), HEX);
+#endif
 
   uint16_t sum = ((wire_length) >> 8) + ((wire_length)&0xFF) + packet.type;
   for (uint8_t i = 0; i < packet.length; i++) {
-    SERIAL_WRITE(packet.data[i]);
+    mySerial->write(packet.data[i]);
     sum += packet.data[i];
+#ifdef FINGERPRINT_DEBUG
+    Serial.print(", 0x");
+    Serial.print(packet.data[i], HEX);
+#endif
   }
 
-  SERIAL_WRITE_U16(sum);
+  mySerial->write((uint8_t)(sum >> 8));
+  mySerial->write((uint8_t)(sum & 0xFF));
+
+#ifdef FINGERPRINT_DEBUG
+  Serial.print(", 0x");
+  Serial.print((uint8_t)(sum >> 8), HEX);
+  Serial.print(", 0x");
+  Serial.println((uint8_t)(sum & 0xFF), HEX);
+#endif
+
   return;
 }
 
@@ -363,6 +479,10 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
   uint8_t byte;
   uint16_t idx = 0, timer = 0;
 
+#ifdef FINGERPRINT_DEBUG
+  Serial.print("<- ");
+#endif
+
   while (true) {
     while (!mySerial->available()) {
       delay(1);
@@ -376,8 +496,9 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
     }
     byte = mySerial->read();
 #ifdef FINGERPRINT_DEBUG
-    Serial.print("<- 0x");
-    Serial.println(byte, HEX);
+    Serial.print("0x");
+    Serial.print(byte, HEX);
+    Serial.print(", ");
 #endif
     switch (idx) {
     case 0:
@@ -407,8 +528,12 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
       break;
     default:
       packet->data[idx - 9] = byte;
-      if ((idx - 8) == packet->length)
+      if ((idx - 8) == packet->length) {
+#ifdef FINGERPRINT_DEBUG
+        Serial.println(" OK ");
+#endif
         return FINGERPRINT_OK;
+      }
       break;
     }
     idx++;
