@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['confidence',['confidence',['../class_adafruit___fingerprint.html#aa0a2aecc94edcce3d4717b51e22114e1',1,'Adafruit_Fingerprint']]]
+  ['baud_5frate',['baud_rate',['../class_adafruit___fingerprint.html#adac4cbe51d2c5a1ab625e95f51eaccb5',1,'Adafruit_Fingerprint']]]
 ];
