@@ -1,16 +1,16 @@
-/*************************************************** 
+/***************************************************
   This is an example sketch for our optical Fingerprint sensor
 
-  Designed specifically to work with the Adafruit BMP085 Breakout 
+  Designed specifically to work with the Adafruit BMP085 Breakout
   ----> http://www.adafruit.com/products/751
 
-  These displays use TTL Serial to communicate, 2 pins are required to 
+  These displays use TTL Serial to communicate, 2 pins are required to
   interface
-  Adafruit invests time and resources providing this open source code, 
-  please support Adafruit and open-source hardware by purchasing 
+  Adafruit invests time and resources providing this open source code,
+  please support Adafruit and open-source hardware by purchasing
   products from Adafruit!
 
-  Written by Limor Fried/Ladyada for Adafruit Industries.  
+  Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
@@ -18,7 +18,7 @@
 #include <Adafruit_Fingerprint.h>
 
 
-#if defined(__AVR__) || defined(ESP8266)
+#if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
 // For UNO and others without hardware serial, we must use software serial...
 // pin #2 is IN from sensor (GREEN wire)
 // pin #3 is OUT from arduino  (WHITE wire)
@@ -35,7 +35,7 @@ SoftwareSerial mySerial(2, 3);
 
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
-void setup()  
+void setup()
 {
   Serial.begin(9600);
   while (!Serial);  // For Yun/Leo/Micro/Zero/...
@@ -61,12 +61,12 @@ void setup()
   Serial.print(F("Device address: ")); Serial.println(finger.device_addr, HEX);
   Serial.print(F("Packet len: ")); Serial.println(finger.packet_len);
   Serial.print(F("Baud rate: ")); Serial.println(finger.baud_rate);
-  
+
   finger.getTemplateCount();
 
   if (finger.templateCount == 0) {
     Serial.print("Sensor doesn't contain any fingerprint data. Please run the 'enroll' example.");
-  } 
+  }
   else {
     Serial.println("Waiting for valid finger...");
       Serial.print("Sensor contains "); Serial.print(finger.templateCount); Serial.println(" templates");
@@ -122,7 +122,7 @@ uint8_t getFingerprintID() {
       Serial.println("Unknown error");
       return p;
   }
-  
+
   // OK converted!
   p = finger.fingerSearch();
   if (p == FINGERPRINT_OK) {
@@ -136,11 +136,11 @@ uint8_t getFingerprintID() {
   } else {
     Serial.println("Unknown error");
     return p;
-  }   
-  
+  }
+
   // found a match!
-  Serial.print("Found ID #"); Serial.print(finger.fingerID); 
-  Serial.print(" with confidence of "); Serial.println(finger.confidence); 
+  Serial.print("Found ID #"); Serial.print(finger.fingerID);
+  Serial.print(" with confidence of "); Serial.println(finger.confidence);
 
   return finger.fingerID;
 }
@@ -155,9 +155,9 @@ int getFingerprintIDez() {
 
   p = finger.fingerFastSearch();
   if (p != FINGERPRINT_OK)  return -1;
-  
+
   // found a match!
-  Serial.print("Found ID #"); Serial.print(finger.fingerID); 
+  Serial.print("Found ID #"); Serial.print(finger.fingerID);
   Serial.print(" with confidence of "); Serial.println(finger.confidence);
-  return finger.fingerID; 
+  return finger.fingerID;
 }

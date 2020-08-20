@@ -1,23 +1,23 @@
-/*************************************************** 
+/***************************************************
   This is an example sketch for our optical Fingerprint sensor
 
-  Designed specifically to work with the Adafruit BMP085 Breakout 
+  Designed specifically to work with the Adafruit BMP085 Breakout
   ----> http://www.adafruit.com/products/751
 
-  These displays use TTL Serial to communicate, 2 pins are required to 
+  These displays use TTL Serial to communicate, 2 pins are required to
   interface
-  Adafruit invests time and resources providing this open source code, 
-  please support Adafruit and open-source hardware by purchasing 
+  Adafruit invests time and resources providing this open source code,
+  please support Adafruit and open-source hardware by purchasing
   products from Adafruit!
 
-  Written by Limor Fried/Ladyada for Adafruit Industries.  
+  Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
 #include <Adafruit_Fingerprint.h>
 
 
-#if defined(__AVR__) || defined(ESP8266)
+#if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
 // For UNO and others without hardware serial, we must use software serial...
 // pin #2 is IN from sensor (GREEN wire)
 // pin #3 is OUT from arduino  (WHITE wire)
@@ -36,7 +36,7 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 uint8_t id;
 
-void setup()  
+void setup()
 {
   Serial.begin(9600);
   while (!Serial);  // For Yun/Leo/Micro/Zero/...
@@ -45,7 +45,7 @@ void setup()
 
   // set the data rate for the sensor serial port
   finger.begin(57600);
-  
+
   if (finger.verifyPassword()) {
     Serial.println("Found fingerprint sensor!");
   } else {
@@ -66,7 +66,7 @@ void setup()
 
 uint8_t readnumber(void) {
   uint8_t num = 0;
-  
+
   while (num == 0) {
     while (! Serial.available());
     num = Serial.parseInt();
@@ -84,7 +84,7 @@ void loop()                     // run over and over again
   }
   Serial.print("Enrolling ID #");
   Serial.println(id);
-  
+
   while (!  getFingerprintEnroll() );
 }
 
@@ -136,7 +136,7 @@ uint8_t getFingerprintEnroll() {
       Serial.println("Unknown error");
       return p;
   }
-  
+
   Serial.println("Remove finger");
   delay(2000);
   p = 0;
@@ -190,10 +190,10 @@ uint8_t getFingerprintEnroll() {
       Serial.println("Unknown error");
       return p;
   }
-  
+
   // OK converted!
   Serial.print("Creating model for #");  Serial.println(id);
-  
+
   p = finger.createModel();
   if (p == FINGERPRINT_OK) {
     Serial.println("Prints matched!");
@@ -206,8 +206,8 @@ uint8_t getFingerprintEnroll() {
   } else {
     Serial.println("Unknown error");
     return p;
-  }   
-  
+  }
+
   Serial.print("ID "); Serial.println(id);
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
@@ -224,7 +224,7 @@ uint8_t getFingerprintEnroll() {
   } else {
     Serial.println("Unknown error");
     return p;
-  } 
+  }
 
   return true;
 }
