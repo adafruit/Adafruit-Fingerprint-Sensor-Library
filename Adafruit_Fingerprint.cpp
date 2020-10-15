@@ -95,6 +95,27 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *hs,
 
 /**************************************************************************/
 /*!
+    @brief  Instantiates sensor with a stream for Serial
+    @param  serial Pointer to a Stream object
+    @param  password 32-bit integer password (default is 0)
+
+*/
+/**************************************************************************/
+
+Adafruit_Fingerprint::Adafruit_Fingerprint(Stream *serial, uint32_t password) {
+
+  thePassword = password;
+  theAddress = 0xFFFFFFFF;
+
+  hwSerial = NULL;
+#if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
+  swSerial = NULL;
+#endif
+  mySerial = serial;
+}
+
+/**************************************************************************/
+/*!
     @brief  Initializes serial interface and baud rate
     @param  baudrate Sensor's UART baud rate (usually 57600, 9600 or 115200)
 */
