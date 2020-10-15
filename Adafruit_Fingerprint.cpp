@@ -102,8 +102,7 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(HardwareSerial *hs,
 */
 /**************************************************************************/
 
-Adafruit_Fingerprint::Adafruit_Fingerprint(Stream *serial,
-                                           uint32_t password) {
+Adafruit_Fingerprint::Adafruit_Fingerprint(Stream *serial, uint32_t password) {
 
   thePassword = password;
   theAddress = 0xFFFFFFFF;
