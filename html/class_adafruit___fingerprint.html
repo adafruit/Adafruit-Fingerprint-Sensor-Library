@@ -77,6 +77,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a134e3243442218444fc273a5b2656f84"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___fingerprint.html#a134e3243442218444fc273a5b2656f84">Adafruit_Fingerprint</a> (HardwareSerial *hs, uint32_t password=0x0)</td></tr>
 <tr class="memdesc:a134e3243442218444fc273a5b2656f84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiates sensor with Hardware Serial.  <a href="#a134e3243442218444fc273a5b2656f84">More...</a><br /></td></tr>
 <tr class="separator:a134e3243442218444fc273a5b2656f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50e1ba8004c2a9151b57f6dfccb0d9bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___fingerprint.html#a50e1ba8004c2a9151b57f6dfccb0d9bb">Adafruit_Fingerprint</a> (Stream *serial, uint32_t password=0x0)</td></tr>
+<tr class="memdesc:a50e1ba8004c2a9151b57f6dfccb0d9bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiates sensor with a stream for Serial.  <a href="#a50e1ba8004c2a9151b57f6dfccb0d9bb">More...</a><br /></td></tr>
+<tr class="separator:a50e1ba8004c2a9151b57f6dfccb0d9bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47e2019a523223d611a527ea0c5ff922"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___fingerprint.html#a47e2019a523223d611a527ea0c5ff922">begin</a> (uint32_t baud)</td></tr>
 <tr class="memdesc:a47e2019a523223d611a527ea0c5ff922"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes serial interface and baud rate.  <a href="#a47e2019a523223d611a527ea0c5ff922">More...</a><br /></td></tr>
 <tr class="separator:a47e2019a523223d611a527ea0c5ff922"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -179,7 +182,7 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <div class="textblock"><p>! Helper class to communicate with and keep state for fingerprint sensors </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a134e3243442218444fc273a5b2656f84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a134e3243442218444fc273a5b2656f84">&#9670;&nbsp;</a></span>Adafruit_Fingerprint()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a134e3243442218444fc273a5b2656f84">&#9670;&nbsp;</a></span>Adafruit_Fingerprint() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -208,6 +211,43 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">hs</td><td>Pointer to HardwareSerial object </td></tr>
+    <tr><td class="paramname">password</td><td>32-bit integer password (default is 0) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a50e1ba8004c2a9151b57f6dfccb0d9bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50e1ba8004c2a9151b57f6dfccb0d9bb">&#9670;&nbsp;</a></span>Adafruit_Fingerprint() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Adafruit_Fingerprint::Adafruit_Fingerprint </td>
+          <td>(</td>
+          <td class="paramtype">Stream *&#160;</td>
+          <td class="paramname"><em>serial</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>password</em> = <code>0x0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Instantiates sensor with a stream for Serial. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">serial</td><td>Pointer to a Stream object </td></tr>
     <tr><td class="paramname">password</td><td>32-bit integer password (default is 0) </td></tr>
   </table>
   </dd>
