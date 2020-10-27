@@ -37,7 +37,7 @@
 #define FINGERPRINT_UPLOADFAIL 0x0F  //!< Error when uploading image
 #define FINGERPRINT_DELETEFAIL 0x10  //!< Failed to delete the template
 #define FINGERPRINT_DBCLEARFAIL 0x11 //!< Failed to clear finger library
-#define FINGERPRINT_PASSFAIL 0x13 //!< Wrong password
+#define FINGERPRINT_PASSFAIL 0x13    //!< Wrong password
 #define FINGERPRINT_INVALIDIMAGE                                               \
   0x15 //!< Failed to generate image because of lac of valid primary image
 #define FINGERPRINT_FLASHERR 0x18   //!< Error when writing flash
