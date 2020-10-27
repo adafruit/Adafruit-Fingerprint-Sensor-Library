@@ -37,8 +37,7 @@
 #define FINGERPRINT_UPLOADFAIL 0x0F  //!< Error when uploading image
 #define FINGERPRINT_DELETEFAIL 0x10  //!< Failed to delete the template
 #define FINGERPRINT_DBCLEARFAIL 0x11 //!< Failed to clear finger library
-#define FINGERPRINT_PASSFAIL                                                   \
-  0x13 //!< Find whether the fingerprint passed or failed
+#define FINGERPRINT_PASSFAIL 0x13    //!< Wrong password
 #define FINGERPRINT_INVALIDIMAGE                                               \
   0x15 //!< Failed to generate image because of lac of valid primary image
 #define FINGERPRINT_FLASHERR 0x18   //!< Error when writing flash
@@ -137,6 +136,7 @@ public:
   void begin(uint32_t baud);
 
   boolean verifyPassword(void);
+  uint8_t checkPassword(void);
   uint8_t getParameters(void);
 
   uint8_t getImage(void);
@@ -178,7 +178,6 @@ public:
   uint16_t baud_rate = 57600; ///< The UART baud rate (set by getParameters)
 
 private:
-  uint8_t checkPassword(void);
   uint32_t thePassword;
   uint32_t theAddress;
   uint8_t recvPacket[20];
