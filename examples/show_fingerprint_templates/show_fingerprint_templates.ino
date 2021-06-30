@@ -119,6 +119,8 @@ uint8_t downloadFingerprintTemplate(uint16_t id)
   }
   Serial.println("\ndone.");
 
+  return p;
+
   /*
   uint8_t templateBuffer[256];
   memset(templateBuffer, 0xff, 256);  //zero out template buffer
