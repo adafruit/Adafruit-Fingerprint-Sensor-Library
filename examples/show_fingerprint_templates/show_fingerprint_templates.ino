@@ -105,7 +105,7 @@ uint8_t downloadFingerprintTemplate(uint16_t id)
   memcpy(fingerTemplate + index, bytesReceived + uindx, 256);   // first 256 bytes
   uindx += 256;       // skip data
   uindx += 2;         // skip checksum
-  uindx = index + 9;  // skip next header
+  uindx += 9;         // skip next header
   index += 256;       // advance pointer
   memcpy(fingerTemplate + index, bytesReceived + uindx, 256);   // second 256 bytes
 
