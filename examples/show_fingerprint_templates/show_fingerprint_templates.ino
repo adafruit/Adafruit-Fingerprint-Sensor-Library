@@ -83,83 +83,68 @@ uint8_t downloadFingerprintTemplate(uint16_t id)
       return p;
   }
 
-  /*
-     The data comes back as a standard packet
-     2 bytes: 0xef01
-     4 bytes: address
-     1 byte: 0x02 (packet ID)
-     2 bytes: N (data length)
-     N bytes: actual data
-     2 bytes:  checksum
-  */
+  // one data packet is 267 bytes. in one data packet, 11 bytes are 'usesless' :D
+  uint8_t bytesReceived[534]; // 2 data packets
+  memset(bytesReceived, 0xff, 534);
 
-
-  const int buff_size = 267;
-  const int header_size = 9;
-
-  uint8_t templateBuffer[buff_size];
-  memset(templateBuffer, 0xff, buff_size);  //zero out template buffer
-  int index = 0;
-
-  // attempt to read in header
   uint32_t starttime = millis();
-  while ((index < header_size) && ((millis() - starttime) < 1000))
-  {
+  int i = 0;
+  while (i < 534 && (millis() - starttime) < 20000) {
+    if (mySerial.available()) {
+      bytesReceived[i++] = mySerial.read();
+    }
+  }
+  Serial.print(i); Serial.println(" bytes read.");
+  Serial.println("Decoding packet...");
+
+  uint8_t fingerTemplate[512]; // the real template
+  memset(fingerTemplate, 0xff, 512);
+
+  // filtering only the data packets
+  int uindx = 9, index = 0;
+  memcpy(fingerTemplate + index, bytesReceived + uindx, 256);   // first 256 bytes
+  uindx += 256;       // skip data
+  uindx += 2;         // skip checksum
+  uindx = index + 9;  // skip next header
+  index += 256;       // advance pointer
+  memcpy(fingerTemplate + index, bytesReceived + uindx, 256);   // second 256 bytes
+
+  for (int i = 0; i < 512; ++i) {
+    //Serial.print("0x");
+    printHex(fingerTemplate[i], 2);
+    //Serial.print(", ");
+  }
+  Serial.println("\ndone.");
+
+  return p;
+
+  /*
+    uint8_t templateBuffer[256];
+    memset(templateBuffer, 0xff, 256);  //zero out template buffer
+    int index=0;
+    uint32_t starttime = millis();
+    while ((index < 256) && ((millis() - starttime) < 1000))
+    {
     if (mySerial.available())
     {
       templateBuffer[index] = mySerial.read();
       index++;
     }
-  }
-
-  Serial.print(index); Serial.println(" bytes read");
-
-  if ( index != header_size ) {
-    Serial.println("bad header");
-    return 1;
-  }
-
-  uint16_t start = templateBuffer[0] << 8 + templateBuffer[1];
-  uint32_t addr = templateBuffer[2] << 24 + templateBuffer[3] << 16 + templateBuffer[4] << 8 + templateBuffer[5];
-  uint8_t p_id = templateBuffer[6];
-  uint16_t count = templateBuffer[7] << 8 + templateBuffer[8];
-
-  Serial.print( "start: 0x"); Serial.println(start, HEX);
-  Serial.print( "addr: 0x"); Serial.println(addr, HEX);
-  Serial.print( "p_id: 0x"); Serial.println(p_id, HEX);
-  Serial.print( "count: 0x"); Serial.println(count, HEX);
-
-  if ( start != 0xef01 ) { Serial.println("Bad start"); return 1; };
-  if ( p_id != 0x02 ) { Serial.println("Bad packet ID"); return 1; };
-  if ( count > 256) { Serial.println("Count too high"); return 1; };
-
-  count += 2;   // read 2 byte checksum at end of data
-  
-  // attempt to read in data
-  starttime = millis();
-  while (count && ((millis() - starttime) < 10000))
-  {
-    if (mySerial.available())
-    {
-      templateBuffer[index] = mySerial.read();
-      index++;
-      count--;
     }
-  }
 
-  if ( count ) { Serial.println("timeout reading data"); return 1; }
-  
-  //dump entire templateBuffer.  This prints out 16 lines of 16 bytes
-  for (int count = 0; count < 16; count++)
-  {
+    Serial.print(index); Serial.println(" bytes read");
+
+    //dump entire templateBuffer.  This prints out 16 lines of 16 bytes
+    for (int count= 0; count < 16; count++)
+    {
     for (int i = 0; i < 16; i++)
     {
       Serial.print("0x");
-      Serial.print(templateBuffer[count * 16 + i+ header_size], HEX);
+      Serial.print(templateBuffer[count*16+i], HEX);
       Serial.print(", ");
     }
     Serial.println();
-  }
+    }*/
 }
 
 
