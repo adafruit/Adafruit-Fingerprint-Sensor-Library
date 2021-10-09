@@ -412,8 +412,9 @@ uint8_t Adafruit_Fingerprint::getTemplateCount(void) {
 */
 /**************************************************************************/
 uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
-  SEND_CMD_PACKET(FINGERPRINT_SETPASSWORD, (password >> 24), (password >> 16),
-                  (password >> 8), password);
+  SEND_CMD_PACKET(FINGERPRINT_SETPASSWORD, (uint8_t)(password >> 24),
+                  (uint8_t)(password >> 16), (uint8_t)(password >> 8),
+                  (uint8_t)(password & 0xFF));
 }
 
 /**************************************************************************/
