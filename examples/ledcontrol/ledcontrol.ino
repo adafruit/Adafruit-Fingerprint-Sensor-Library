@@ -42,11 +42,11 @@ void setup()
   // set the data rate for the sensor serial port
   finger.begin(57600);
   delay(5);
-  if (finger.verifyPassword()) {
+  if (finger.verifyPassword() == FINGERPRINT_OK) {
     Serial.println("Found fingerprint sensor!");
   } else {
     Serial.println("Did not find fingerprint sensor :(");
-    while (1) { delay(1); }
+    while (1) delay(1);
   }
 
   Serial.println(F("Reading sensor parameters"));
