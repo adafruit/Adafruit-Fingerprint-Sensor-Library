@@ -559,6 +559,9 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
       break;
     }
     idx++;
+    if ((idx + 9) >= sizeof(packet->data)) {
+      return FINGERPRINT_BADPACKET;
+    }
   }
   // Shouldn't get here so...
   return FINGERPRINT_BADPACKET;
