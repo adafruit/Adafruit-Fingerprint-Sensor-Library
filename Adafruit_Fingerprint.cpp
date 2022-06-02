@@ -142,14 +142,21 @@ boolean Adafruit_Fingerprint::verifyPassword(void) {
   return checkPassword() == FINGERPRINT_OK;
 }
 
+/**************************************************************************/
+/*!
+    @brief  Verifies the sensors' access password (default password is
+   0x0000000). A good way to also check if the sensors is active and responding
+    @returns <code>FINGERPRINT_OK</code> on success
+    @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
+    @returns <code>FINGERPRINT_PASSFAIL</code> on wrong password
+*/
+/**************************************************************************/
+
 uint8_t Adafruit_Fingerprint::checkPassword(void) {
   GET_CMD_PACKET(FINGERPRINT_VERIFYPASSWORD, (uint8_t)(thePassword >> 24),
                  (uint8_t)(thePassword >> 16), (uint8_t)(thePassword >> 8),
                  (uint8_t)(thePassword & 0xFF));
-  if (packet.data[0] == FINGERPRINT_OK)
-    return FINGERPRINT_OK;
-  else
-    return FINGERPRINT_PACKETRECIEVEERR;
+  return packet.data[0];
 }
 
 /**************************************************************************/
