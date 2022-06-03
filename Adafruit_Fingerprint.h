@@ -105,7 +105,7 @@
 #define FINGERPRINT_BAUDRATE_105600 0xB //!< UART baud 105600
 #define FINGERPRINT_BAUDRATE_115200 0xC //!< UART baud 115200
 
-#define FINGERPRINT_SECURITY_REG_ADDR 0x5 //<! Security level register address
+#define FINGERPRINT_SECURITY_REG_ADDR 0x5 //!< Security level register address
 // The safety level is 1 The highest rate of false recognition , The rejection
 // rate is the lowest . The safety level is 5 The lowest tate of false
 // recognition, The rejection rate is the highest .

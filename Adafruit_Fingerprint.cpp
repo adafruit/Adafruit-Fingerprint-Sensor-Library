@@ -448,7 +448,7 @@ uint8_t Adafruit_Fingerprint::setBaudRate(uint8_t baudrate) {
 /**************************************************************************/
 /*!
     @brief   Change security level
-    @param   baudrate 8-bit security level
+    @param   level 8-bit security level
     @returns <code>FINGERPRINT_OK</code> on success
     @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
 */
@@ -461,7 +461,7 @@ uint8_t Adafruit_Fingerprint::setSecurityLevel(uint8_t level) {
 /**************************************************************************/
 /*!
     @brief   Change packet size
-    @param   baudrate 8-bit packet size
+    @param   size 8-bit packet size
     @returns <code>FINGERPRINT_OK</code> on success
     @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
 */
