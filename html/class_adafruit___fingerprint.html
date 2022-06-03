@@ -131,6 +131,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad5a8b73e0769cf64d44b04b065db87ef"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___fingerprint.html#ad5a8b73e0769cf64d44b04b065db87ef">LEDcontrol</a> (uint8_t control, uint8_t speed, uint8_t coloridx, uint8_t count=0)</td></tr>
 <tr class="memdesc:ad5a8b73e0769cf64d44b04b065db87ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control the built in Aura LED (if exists). Check datasheet/manual for different colors and control codes available.  <a href="#ad5a8b73e0769cf64d44b04b065db87ef">More...</a><br /></td></tr>
 <tr class="separator:ad5a8b73e0769cf64d44b04b065db87ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5526707615592d1ae2900c26aabb0d02"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___fingerprint.html#a5526707615592d1ae2900c26aabb0d02">setBaudRate</a> (uint8_t baudrate)</td></tr>
+<tr class="memdesc:a5526707615592d1ae2900c26aabb0d02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change UART baudrate.  <a href="#a5526707615592d1ae2900c26aabb0d02">More...</a><br /></td></tr>
+<tr class="separator:a5526707615592d1ae2900c26aabb0d02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c31fe8631f268ce2814584187ad5e44"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___fingerprint.html#a0c31fe8631f268ce2814584187ad5e44">setSecurityLevel</a> (uint8_t level)</td></tr>
+<tr class="memdesc:a0c31fe8631f268ce2814584187ad5e44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change security level.  <a href="#a0c31fe8631f268ce2814584187ad5e44">More...</a><br /></td></tr>
+<tr class="separator:a0c31fe8631f268ce2814584187ad5e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a894daa96c2a9b66c21940a025ce13cba"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___fingerprint.html#a894daa96c2a9b66c21940a025ce13cba">setPacketSize</a> (uint8_t size)</td></tr>
+<tr class="memdesc:a894daa96c2a9b66c21940a025ce13cba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change packet size.  <a href="#a894daa96c2a9b66c21940a025ce13cba">More...</a><br /></td></tr>
+<tr class="separator:a894daa96c2a9b66c21940a025ce13cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c9b787413658ad02a23f4afd0fad658"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_adafruit___fingerprint.html#a4c9b787413658ad02a23f4afd0fad658">writeStructuredPacket</a> (const <a class="el" href="struct_adafruit___fingerprint___packet.html">Adafruit_Fingerprint_Packet</a> &amp;p)</td></tr>
 <tr class="memdesc:a4c9b787413658ad02a23f4afd0fad658"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to process a packet and send it over UART to the sensor.  <a href="#a4c9b787413658ad02a23f4afd0fad658">More...</a><br /></td></tr>
 <tr class="separator:a4c9b787413658ad02a23f4afd0fad658"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -744,6 +753,93 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <dl class="section return"><dt>Returns</dt><dd><code>FINGERPRINT_OK</code> on fingerprint match success </dd>
 <dd>
 <code>FINGERPRINT_NOTFOUND</code> no match made </dd>
+<dd>
+<code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error </dd></dl>
+
+</div>
+</div>
+<a id="a5526707615592d1ae2900c26aabb0d02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5526707615592d1ae2900c26aabb0d02">&#9670;&nbsp;</a></span>setBaudRate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t Adafruit_Fingerprint::setBaudRate </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>baudrate</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Change UART baudrate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">baudrate</td><td>8-bit Uart baudrate </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>FINGERPRINT_OK</code> on success </dd>
+<dd>
+<code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error </dd></dl>
+
+</div>
+</div>
+<a id="a0c31fe8631f268ce2814584187ad5e44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c31fe8631f268ce2814584187ad5e44">&#9670;&nbsp;</a></span>setSecurityLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t Adafruit_Fingerprint::setSecurityLevel </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>level</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Change security level. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">level</td><td>8-bit security level </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>FINGERPRINT_OK</code> on success </dd>
+<dd>
+<code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error </dd></dl>
+
+</div>
+</div>
+<a id="a894daa96c2a9b66c21940a025ce13cba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a894daa96c2a9b66c21940a025ce13cba">&#9670;&nbsp;</a></span>setPacketSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t Adafruit_Fingerprint::setPacketSize </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Change packet size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>8-bit packet size </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>FINGERPRINT_OK</code> on success </dd>
 <dd>
 <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error </dd></dl>
 
