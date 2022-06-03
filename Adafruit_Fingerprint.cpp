@@ -417,7 +417,6 @@ uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
                   (uint8_t)(password & 0xFF));
 }
 
-
 /**************************************************************************/
 /*!
     @brief   Writing module registers
@@ -428,10 +427,9 @@ uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
     @returns <code>FINGERPRINT_ADDRESS_ERROR</code> on register address error
 */
 /**************************************************************************/
-uint8_t Adafruit_Fingerprint::writeRegister (uint8_t regAdd, uint8_t value)
-{
+uint8_t Adafruit_Fingerprint::writeRegister(uint8_t regAdd, uint8_t value) {
 
-  SEND_CMD_PACKET (FINGERPRINT_WRITE_REG, regAdd, value);
+  SEND_CMD_PACKET(FINGERPRINT_WRITE_REG, regAdd, value);
 }
 
 /**************************************************************************/
@@ -442,10 +440,9 @@ uint8_t Adafruit_Fingerprint::writeRegister (uint8_t regAdd, uint8_t value)
     @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
 */
 /**************************************************************************/
-uint8_t Adafruit_Fingerprint::setBaudRate (uint8_t baudrate)
-{
+uint8_t Adafruit_Fingerprint::setBaudRate(uint8_t baudrate) {
 
-  return (writeRegister (FINGERPRINT_BAUD_REG_ADDR, baud_rate));
+  return (writeRegister(FINGERPRINT_BAUD_REG_ADDR, baud_rate));
 }
 
 /**************************************************************************/
@@ -456,10 +453,9 @@ uint8_t Adafruit_Fingerprint::setBaudRate (uint8_t baudrate)
     @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
 */
 /**************************************************************************/
-uint8_t Adafruit_Fingerprint::setSecurityLevel (uint8_t level)
-{
+uint8_t Adafruit_Fingerprint::setSecurityLevel(uint8_t level) {
 
-  return (writeRegister (FINGERPRINT_SECURITY_REG_ADDR, level));
+  return (writeRegister(FINGERPRINT_SECURITY_REG_ADDR, level));
 }
 
 /**************************************************************************/
@@ -470,10 +466,9 @@ uint8_t Adafruit_Fingerprint::setSecurityLevel (uint8_t level)
     @returns <code>FINGERPRINT_PACKETRECIEVEERR</code> on communication error
 */
 /**************************************************************************/
-uint8_t Adafruit_Fingerprint::setPacketSize (uint8_t size)
-{
+uint8_t Adafruit_Fingerprint::setPacketSize(uint8_t size) {
 
-  return (writeRegister (FINGERPRINT_PACKET_REG_ADDR, size));
+  return (writeRegister(FINGERPRINT_PACKET_REG_ADDR, size));
 }
 /**************************************************************************/
 /*!
