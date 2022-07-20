@@ -131,6 +131,22 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
 #endif
 }
 
+#if defined(ESP32)
+/**************************************************************************/
+/*!
+    @brief  Initializes serial interface and baud rate
+    @param  baudrate Sensor's UART baud rate (usually 57600, 9600 or 115200)
+	  @param  tx pin
+	  @param  rx pin
+*/
+/**************************************************************************/
+void Adafruit_Fingerprint::begin(uint32_t baudrate, int8_t rxPin, int8_t txPin) {
+  delay(1000); // one second delay to let the sensor 'boot up'
+
+  hwSerial->begin(baudrate, SERIAL_8N1, rxPin, txPin);
+}
+#endif
+
 /**************************************************************************/
 /*!
     @brief  Verifies the sensors' access password (default password is
