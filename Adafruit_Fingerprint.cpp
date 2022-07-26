@@ -140,7 +140,8 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
     @param  txPin pin
 */
 /**************************************************************************/
-void Adafruit_Fingerprint::begin(uint32_t baudrate, int8_t rxPin, int8_t txPin) {
+void Adafruit_Fingerprint::begin(uint32_t baudrate, int8_t rxPin,
+                                 int8_t txPin) {
   delay(1000); // one second delay to let the sensor 'boot up'
 
   hwSerial->begin(baudrate, SERIAL_8N1, rxPin, txPin);
