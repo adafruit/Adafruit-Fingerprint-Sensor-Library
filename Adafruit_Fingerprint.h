@@ -168,9 +168,9 @@ public:
   Adafruit_Fingerprint(Stream *serial, uint32_t password = 0x0);
 
   void begin(uint32_t baud);
-  #if defined(ESP32)
+#if defined(ESP32)
   void begin(uint32_t baud, int8_t rxPin, int8_t txPin);
-  #endif
+#endif
   
   boolean verifyPassword(void);
   uint8_t getParameters(void);

@@ -136,8 +136,8 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
 /*!
     @brief  Initializes serial interface and baud rate
     @param  baudrate Sensor's UART baud rate (usually 57600, 9600 or 115200)
-	  @param  tx pin
-	  @param  rx pin
+    @param  rxPin pin
+    @param  txPin pin
 */
 /**************************************************************************/
 void Adafruit_Fingerprint::begin(uint32_t baudrate, int8_t rxPin, int8_t txPin) {
