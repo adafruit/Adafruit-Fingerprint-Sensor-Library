@@ -139,7 +139,10 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
 */
 /**************************************************************************/
 boolean Adafruit_Fingerprint::verifyPassword(void) {
-  return checkPassword() == FINGERPRINT_OK;
+  if(checkPassword() == FINGERPRINT_OK){   
+    return getParameters()== FINGERPRINT_OK;  //properly configure the object by reading system parameters
+  }
+  return false;
 }
 
 uint8_t Adafruit_Fingerprint::checkPassword(void) {
@@ -264,6 +267,67 @@ uint8_t Adafruit_Fingerprint::loadModel(uint16_t location) {
 */
 uint8_t Adafruit_Fingerprint::getModel(void) {
   SEND_CMD_PACKET(FINGERPRINT_UPLOAD, 0x01);
+}
+
+/**************************************************************************/
+/*!
+    @brief   read template data from the sensor
+    @returns a buffer where the template's 512 bytes are stored
+*/
+/**************************************************************************/
+uint8_t Adafruit_Fingerprint::get_template_buffer(int bufsize,uint8_t ref_buf[]) { //new addition
+  int rcv_bt_len=(packet_len+11)*4; //data packet contains 11 extra bytes(first->2-header,4-address,1-type,2-length,last->2-checksum) excpet the main data
+  int div=ceil(bufsize/packet_len);
+  uint8_t bytesReceived[rcv_bt_len];
+  memset(bytesReceived, 0xff, rcv_bt_len);
+  uint32_t starttime = millis();
+  int i = 0;
+  while (i<rcv_bt_len && (millis() - starttime) < 5000) {
+    if (mySerial->available()) {
+      starttime = millis();
+      bytesReceived[i++] = mySerial->read();
+    }
+  }
+  if(i!=rcv_bt_len) return FINGERPRINT_TIMEOUT;
+  memset(ref_buf, 0xff, 512);
+  for(int m=0;m<div;m++){ //filtering data packets
+    uint8_t stat=bytesReceived[(m*(packet_len+11))+6];
+    if( stat!= FINGERPRINT_DATAPACKET && stat!= FINGERPRINT_ENDDATAPACKET) return FINGERPRINT_BADPACKET;
+  memcpy(ref_buf + (m*packet_len), bytesReceived + (m*(packet_len+11))+9, packet_len); 
+  }
+  return FINGERPRINT_OK;
+}
+
+
+/**************************************************************************/
+/*!
+    @brief   makes the buffer ready to download from upper computer
+    @returns status
+*/
+/**************************************************************************/
+uint8_t Adafruit_Fingerprint::downloadModel(uint8_t buffer_no) { //new addition
+  SEND_CMD_PACKET(FINGERPRINT_DOWNLOAD, buffer_no);
+}
+
+
+/**************************************************************************/
+/*!
+    @brief   tries to write the template data to sensor buffer 1
+    @returns true/false (successful or not)
+*/
+/**************************************************************************/
+boolean Adafruit_Fingerprint::write_template_to_sensor(uint8_t ref_buf[]) { //new addition
+  if(downloadModel(0x01) != FINGERPRINT_OK)return false; //check if buffer 1 is ready to be loaded
+  int div=ceil(sizeof(ref_buf)/packet_len);
+  uint8_t data[packet_len];
+  memset(ref_buf, 0xff, packet_len);
+  Adafruit_Fingerprint_Packet t_packet(FINGERPRINT_DATAPACKET,sizeof(data),data); 
+  for(int i=0;i<div;i++){
+    if(i==(div-1))t_packet.type=FINGERPRINT_ENDDATAPACKET;
+    memcpy(t_packet.data,ref_buf+(packet_len*i),packet_len);
+    writeStructuredPacket(t_packet);
+  }
+  return true;
 }
 
 /**************************************************************************/
