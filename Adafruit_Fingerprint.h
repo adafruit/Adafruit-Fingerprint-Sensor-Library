@@ -147,7 +147,7 @@ struct Adafruit_Fingerprint_Packet {
     address[1] = 0xFF;
     address[2] = 0xFF;
     address[3] = 0xFF;
-    if (length < 256)   ///considering max data length for hobby type sensors.
+    if (length < 256)   ///considering max data packet length for hobby type sensors.
       memcpy(this->data, data, length);
     else
       memcpy(this->data, data, 256);
