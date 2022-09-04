@@ -3,22 +3,20 @@
   Date:9/3/2022
 
   This example shows how to write template data to the sensor from an external 
-  SD card using the SdFat library. (also works with the SD library)
+  SD card using the SD library. 
   First a template is created then it is stored in the SD card as a text file 
   using the "Save_template_to_SD.ino" example.
   That text file can now be written back to the sensor against an ID using this example
    
   Happy coding! :)
  *******************************************************************************************/
- 
+#include <Adafruit_Fingerprint.h>
 #include <SoftwareSerial.h>
 
 SoftwareSerial swser(6, 7); // RX, TX
 
-#include <Adafruit_Fingerprint.h>
 #include <SPI.h>
-#include "SdFat.h"
-SdFat SD;
+#include <SD.h>
 
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&swser, 0);
 
