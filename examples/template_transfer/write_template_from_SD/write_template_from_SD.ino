@@ -3,24 +3,26 @@
   Date:9/3/2022
 
   This example shows how to write template data to the sensor from an external 
-  SD card using the SD library. (also works with the sdFat library)
+  SD card using the SdFat library. (also works with the SD library)
   First a template is created then it is stored in the SD card as a text file 
   using the "Save_template_to_SD.ino" example.
   That text file can now be written back to the sensor against an ID using this example
-  
-  This example is tested on esp32 & arduino Mega 2560 boards. Other boards are also supposed to work.
    
   Happy coding! :)
- *******************************************************************************************/*/
+ *******************************************************************************************/
  
+#include <SoftwareSerial.h>
+
+SoftwareSerial swser(6, 7); // RX, TX
+
 #include <Adafruit_Fingerprint.h>
-#include "FS.h"
-#include "SD.h"
-#include "SPI.h"
+#include <SPI.h>
+#include "SdFat.h"
+SdFat SD;
 
-Adafruit_Fingerprint finger = Adafruit_Fingerprint(&Serial2, 0);
+Adafruit_Fingerprint finger = Adafruit_Fingerprint(&swser, 0);
 
-#define SD_CS 5  //default is 5 for esp32, change according to your hardware connection of SD card
+#define SD_CS 5  //change according to your chip select connection of SD card
 
 void setup() {
   Serial.begin(115200);
@@ -35,12 +37,6 @@ void setup() {
         Serial.println("Card Mount Failed");
         while(1);
     }
-    uint8_t cardType = SD.cardType();
-    if(cardType == CARD_NONE){
-        Serial.println("No SD card attached");
-        while(1);
-    }
-
     write_template_from_SD();
 }
 
