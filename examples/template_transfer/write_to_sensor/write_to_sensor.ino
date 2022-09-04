@@ -30,7 +30,7 @@ void setup() {
     Serial.println("Did not find fingerprint sensor :(");
     while (1);
   }
-  write_template_to_sensor();
+  write_template_data_to_sensor();
 }
 
 uint8_t readnumber(void) {
@@ -43,7 +43,7 @@ uint8_t readnumber(void) {
   return num;
 }
 
-void write_template_to_sensor() {
+void write_template_data_to_sensor() {
   uint8_t fingerTemplate[512]; //this where you need to store your template data 
   memset(fingerTemplate, 0xff, 512);
 
