@@ -91,6 +91,7 @@ void store_template_to_buf(){
     Serial.println("Template data (comma sperated HEX):");
     for (int k = 0; k < (512/finger.packet_len); k++) { //printing out the template data in seperate rows, where row-length = packet_length
       for (int l = 0; l < finger.packet_len; l++) {
+        Serial.print("0x");
         Serial.print(f_buf[(k * finger.packet_len) + l], HEX);
         Serial.print(",");
       }
