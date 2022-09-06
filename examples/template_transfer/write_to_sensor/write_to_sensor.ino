@@ -45,7 +45,7 @@ uint8_t readnumber(void) {
 
 void write_template_data_to_sensor() {
   uint8_t fingerTemplate[512]; //this where you need to store your template data 
-  memset(fingerTemplate, 0xff, 512);
+  memset(fingerTemplate, 0xff, 512); //comment this if you've manually put data to the line above
 
   /*
   a template given to store your template data(read from sd or form cloud) in fingerTemplate buffer
