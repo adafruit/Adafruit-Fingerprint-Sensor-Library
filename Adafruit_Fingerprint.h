@@ -183,7 +183,7 @@ public:
   uint8_t getModel(void);
   uint8_t get_template_buffer(int bufsize,uint8_t ref_buf[]); // new addiiton,for getting template data from sensor
   uint8_t downloadModel(uint8_t buffer_no); //new addiiton,for loading template data to buffer 
-  boolean write_template_to_sensor(uint8_t ref_buf[]) ; // new addition, for writing template data to sensor
+  boolean write_template_to_sensor(int temp_Size, uint8_t ref_buf[]) ; // new addition, for writing template data to sensor
   uint8_t deleteModel(uint16_t id);
   uint8_t fingerFastSearch(void);
   uint8_t fingerSearch(uint8_t slot = 1);
