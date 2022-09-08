@@ -8,7 +8,7 @@
   The teplate data is stored initially in the microcontroller 
   saved within the microcontroller (can be fetched from SD card or cloud)
   
-  To work with this example first get the template data from "get_template.ino" example. Then store it in 
+  To work with this example first get the template data from "get_direct_template.ino" example. Then store it in 
   the 'fingerTemplate' array buffer in this code. Then the template data will 
   be written to the sensor and be enrolled against an ID. 
 
@@ -44,22 +44,17 @@ uint8_t readnumber(void) {
 }
 
 void write_template_data_to_sensor() {
-  uint8_t fingerTemplate[512]; //this where you need to store your template data 
-  memset(fingerTemplate, 0xff, 512); //comment this if you've manually put data to the line above
-
-  /*
-  a template given to store your template data(read from sd or form cloud) in fingerTemplate buffer
+  int template_buf_size=512; //usually hobby grade sensors have 512 byte template data, watch datasheet to know the info
   
-  for(int i=0;i<512;i++){   
-    fingerTemplate[i]=your_template_data[i];
-  }
+  uint8_t fingerTemplate[512]; //this is where you need to store your template data 
+  /*
+  you can manually save the data got from "get_template.ino" example like this
 
-  or you can manually save the data got from "get_template.ino" example
-
-  uint8_t fingerTemplate[512]={0x03,0x0E,...........};
+  uint8_t fingerTemplate[512]={0x03,0x0E,....your template data.....};
   
   */
-
+  memset(fingerTemplate, 0xff, 512); //comment this line if you've manually put data to the line above
+  
   Serial.println("Ready to write template to sensor...");
   Serial.println("Enter the id to enroll against, i.e id (1 to 127)");
   int id = readnumber();
@@ -68,7 +63,7 @@ void write_template_data_to_sensor() {
   }
   Serial.print("Writing template against ID #"); Serial.println(id);
 
-  if (finger.write_template_to_sensor(fingerTemplate)) { //telling the sensor to download the template data to it's char buffer from upper computer (this microcontroller's "fingerTemplate" buffer)
+  if (finger.write_template_to_sensor(template_buf_size,fingerTemplate)) { //telling the sensor to download the template data to it's char buffer from upper computer (this microcontroller's "fingerTemplate" buffer)
     Serial.println("now writing to sensor...");
   } else {
     Serial.println("writing to sensor failed");
