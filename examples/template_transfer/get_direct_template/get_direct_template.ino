@@ -95,7 +95,7 @@ void store_template_to_buf(){
         Serial.print(f_buf[(k * finger.packet_len) + l], HEX);
         Serial.print(",");
       }
-      Serial.println(".");
+      Serial.println("");
     }
   }
 
