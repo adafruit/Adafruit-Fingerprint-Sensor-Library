@@ -316,9 +316,9 @@ uint8_t Adafruit_Fingerprint::downloadModel(uint8_t buffer_no) { //new addition
     @returns true/false (successful or not)
 */
 /**************************************************************************/
-boolean Adafruit_Fingerprint::write_template_to_sensor(uint8_t ref_buf[]) { //new addition
+boolean Adafruit_Fingerprint::write_template_to_sensor(int temp_Size, uint8_t ref_buf[]) { //new addition
   if(downloadModel(0x01) != FINGERPRINT_OK)return false; //check if buffer 1 is ready to be loaded
-  int div=ceil(sizeof(ref_buf)/packet_len);
+  int div=ceil(temp_Size/packet_len);
   uint8_t data[packet_len];
   memset(data, 0xff, packet_len);
   Adafruit_Fingerprint_Packet t_packet(FINGERPRINT_DATAPACKET,sizeof(data),data); 
