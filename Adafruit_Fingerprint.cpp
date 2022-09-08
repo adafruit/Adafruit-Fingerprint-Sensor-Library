@@ -320,8 +320,8 @@ boolean Adafruit_Fingerprint::write_template_to_sensor(int temp_Size, uint8_t re
   if(downloadModel(0x01) != FINGERPRINT_OK)return false; //check if buffer 1 is ready to be loaded
   int div=ceil(temp_Size/packet_len);
   uint8_t data[packet_len];
-  memset(data, 0xff, packet_len);
-  Adafruit_Fingerprint_Packet t_packet(FINGERPRINT_DATAPACKET,sizeof(data),data); 
+  //memset(data, 0xff, packet_len);
+  Adafruit_Fingerprint_Packet t_packet(FINGERPRINT_DATAPACKET,packet_len,data); 
   for(int i=0;i<div;i++){
     if(i==(div-1))t_packet.type=FINGERPRINT_ENDDATAPACKET;
     memcpy(t_packet.data,ref_buf+(packet_len*i),packet_len);
