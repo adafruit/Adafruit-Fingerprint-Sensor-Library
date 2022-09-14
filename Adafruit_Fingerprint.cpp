@@ -289,7 +289,7 @@ uint8_t Adafruit_Fingerprint::get_template_buffer(int bufsize,uint8_t ref_buf[])
     }
   }
   if(i!=rcv_bt_len) return FINGERPRINT_TIMEOUT;
-  memset(ref_buf, 0xff, 512);
+  memset(ref_buf, 0xff, bufsize);
   for(int m=0;m<div;m++){ //filtering data packets
     uint8_t stat=bytesReceived[(m*(packet_len+11))+6];
     if( stat!= FINGERPRINT_DATAPACKET && stat!= FINGERPRINT_ENDDATAPACKET) return FINGERPRINT_BADPACKET;
