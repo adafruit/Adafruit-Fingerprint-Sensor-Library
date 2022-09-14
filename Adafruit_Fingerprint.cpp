@@ -276,8 +276,8 @@ uint8_t Adafruit_Fingerprint::getModel(void) {
 */
 /**************************************************************************/
 uint8_t Adafruit_Fingerprint::get_template_buffer(int bufsize,uint8_t ref_buf[]) { //new addition
-  int rcv_bt_len=(packet_len+11)*4; //data packet contains 11 extra bytes(first->2-header,4-address,1-type,2-length,last->2-checksum) excpet the main data
   int div=ceil(bufsize/packet_len);
+  int rcv_bt_len=(packet_len+11)*div; //data packet contains 11 extra bytes(first->2-header,4-address,1-type,2-length,last->2-checksum) excpet the main data
   uint8_t bytesReceived[rcv_bt_len];
   memset(bytesReceived, 0xff, rcv_bt_len);
   uint32_t starttime = millis();
