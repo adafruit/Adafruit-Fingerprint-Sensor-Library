@@ -21,3 +21,4 @@ Adafruit invests time and resources providing this open source code, please supp
 Written by Limor Fried/Ladyada  for Adafruit Industries.  
 BSD license, check license.txt for more information
 All text above must be included in any redistribution
+Thank you for Sharing this.
