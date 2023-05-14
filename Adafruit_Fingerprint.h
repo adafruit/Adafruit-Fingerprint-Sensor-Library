@@ -65,6 +65,7 @@
 #define FINGERPRINT_STORE 0x06          //!< Store template
 #define FINGERPRINT_LOAD 0x07           //!< Read/load template
 #define FINGERPRINT_UPLOAD 0x08         //!< Upload template
+#define FINGERPRINT_DOWNLOAD 0x09         //!< Download template data to buffer
 #define FINGERPRINT_DELETE 0x0C         //!< Delete templates
 #define FINGERPRINT_EMPTY 0x0D          //!< Empty library
 #define FINGERPRINT_READSYSPARAM 0x0F   //!< Read system parameters
@@ -146,16 +147,16 @@ struct Adafruit_Fingerprint_Packet {
     address[1] = 0xFF;
     address[2] = 0xFF;
     address[3] = 0xFF;
-    if (length < 64)
+    if (length < 256)   ///considering max data packet length for hobby type sensors.
       memcpy(this->data, data, length);
     else
-      memcpy(this->data, data, 64);
+      memcpy(this->data, data, 256);
   }
   uint16_t start_code; ///< "Wakeup" code for packet detection
   uint8_t address[4];  ///< 32-bit Fingerprint sensor address
   uint8_t type;        ///< Type of packet
   uint16_t length;     ///< Length of packet
-  uint8_t data[64];    ///< The raw buffer for packet payload
+  uint8_t data[256];    ///< The raw buffer for packet payload
 };
 
 ///! Helper class to communicate with and keep state for fingerprint sensors
@@ -180,6 +181,9 @@ public:
   uint8_t storeModel(uint16_t id);
   uint8_t loadModel(uint16_t id);
   uint8_t getModel(void);
+  uint8_t get_template_buffer(int bufsize,uint8_t ref_buf[]); // new addiiton,for getting template data from sensor
+  uint8_t downloadModel(uint8_t buffer_no); //new addiiton,for loading template data to buffer 
+  boolean write_template_to_sensor(int temp_Size, uint8_t ref_buf[]) ; // new addition, for writing template data to sensor
   uint8_t deleteModel(uint16_t id);
   uint8_t fingerFastSearch(void);
   uint8_t fingerSearch(uint8_t slot = 1);
@@ -207,11 +211,11 @@ public:
 
   uint16_t status_reg = 0x0; ///< The status register (set by getParameters)
   uint16_t system_id = 0x0;  ///< The system identifier (set by getParameters)
-  uint16_t capacity = 64; ///< The fingerprint capacity (set by getParameters)
+  uint16_t capacity = 127; ///< The fingerprint capacity (set by getParameters)
   uint16_t security_level = 0; ///< The security level (set by getParameters)
   uint32_t device_addr =
       0xFFFFFFFF;             ///< The device address (set by getParameters)
-  uint16_t packet_len = 64;   ///< The max packet length (set by getParameters)
+  uint16_t packet_len = 128;   ///< The max packet length (set by getParameters)
   uint16_t baud_rate = 57600; ///< The UART baud rate (set by getParameters)
 
 private:
