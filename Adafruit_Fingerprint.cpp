@@ -442,7 +442,7 @@ uint8_t Adafruit_Fingerprint::writeRegister(uint8_t regAdd, uint8_t value) {
 /**************************************************************************/
 uint8_t Adafruit_Fingerprint::setBaudRate(uint8_t baudrate) {
 
-  return (writeRegister(FINGERPRINT_BAUD_REG_ADDR, baud_rate));
+  return (writeRegister(FINGERPRINT_BAUD_REG_ADDR, baudrate));
 }
 
 /**************************************************************************/
