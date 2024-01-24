@@ -86,6 +86,7 @@ void loop()                     // run over and over again
   }
   Serial.print("Enrolling ID #");
   Serial.println(id);
+
   while (! getFingerprintEnroll() );
 }
 
