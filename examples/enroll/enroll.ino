@@ -86,11 +86,7 @@ void loop()                     // run over and over again
   }
   Serial.print("Enrolling ID #");
   Serial.println(id);
-  //assume an error happened
-  int error = 1;
-  while (error){
-    error = getFingerprintEnroll();
-  }
+  while (! getFingerprintEnroll() );
 }
 
 uint8_t getFingerprintEnroll() {
