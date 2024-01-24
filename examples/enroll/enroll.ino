@@ -10,7 +10,9 @@
   please support Adafruit and open-source hardware by purchasing
   products from Adafruit!
 
-  Written by Limor Fried/Ladyada for Adafruit Industries.
+  Written by Limor Fried/Ladyada for Adafruit Industries.  
+  Small bug-fix by Michael cochez
+
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
@@ -85,7 +87,7 @@ void loop()                     // run over and over again
   Serial.print("Enrolling ID #");
   Serial.println(id);
 
-  while (!  getFingerprintEnroll() );
+  while (! getFingerprintEnroll() );
 }
 
 uint8_t getFingerprintEnroll() {
@@ -99,7 +101,7 @@ uint8_t getFingerprintEnroll() {
       Serial.println("Image taken");
       break;
     case FINGERPRINT_NOFINGER:
-      Serial.println(".");
+      Serial.print(".");
       break;
     case FINGERPRINT_PACKETRECIEVEERR:
       Serial.println("Communication error");
