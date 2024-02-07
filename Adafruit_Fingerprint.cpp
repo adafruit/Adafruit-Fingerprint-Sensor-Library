@@ -515,7 +515,7 @@ void Adafruit_Fingerprint::writeStructuredPacket(
 #endif
 
   uint16_t sum = ((wire_length) >> 8) + ((wire_length)&0xFF) + packet.type;
-  for (uint8_t i = 0; i < packet.length; i++) {
+  for (uint16_t i = 0; i < packet.length; i++) {
     mySerial->write(packet.data[i]);
     sum += packet.data[i];
 #ifdef FINGERPRINT_DEBUG
