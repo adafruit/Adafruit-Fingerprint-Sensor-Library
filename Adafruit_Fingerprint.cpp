@@ -131,6 +131,12 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
 #endif
 }
 
+/**************************************************************************/
+/*!
+    @brief  Closes serial interface. Can be used to save performance and
+    power usage
+*/
+/**************************************************************************/
 void Adafruit_Fingerprint::end(void) {
   if (hwSerial)
     hwSerial->end();
