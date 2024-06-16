@@ -131,6 +131,15 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
 #endif
 }
 
+void Adafruit_Fingerprint::end(void) {
+  if (hwSerial)
+    hwSerial->end();
+#if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
+  if (swSerial)
+    swSerial->end();
+#endif
+}
+
 /**************************************************************************/
 /*!
     @brief  Verifies the sensors' access password (default password is
