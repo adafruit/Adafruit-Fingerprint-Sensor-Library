@@ -133,6 +133,25 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
 
 /**************************************************************************/
 /*!
+    @brief  Initializes serial interface and baud rate
+    @param  baudrate Sensor's UART baud rate (usually 57600, 9600 or 115200)
+    @param  rx pin connected to the Sensor to receive data
+    @param  tx pin connected to the Sensor to transmit data
+*/
+/**************************************************************************/
+void Adafruit_Fingerprint::begin(uint32_t baudrate, uint32_t rx, uint32_t tx) {
+  delay(1000); // one second delay to let the sensor 'boot up'
+
+  if (hwSerial)
+    hwSerial->begin(baudrate,SERIAL_8N1,rx,tx);
+#if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
+  if (swSerial)
+    swSerial->begin(baudrate,SERIAL_8N1,rx,tx);
+#endif
+}
+
+/**************************************************************************/
+/*!
     @brief  Verifies the sensors' access password (default password is
    0x0000000). A good way to also check if the sensors is active and responding
     @returns True if password is correct
@@ -415,6 +434,16 @@ uint8_t Adafruit_Fingerprint::setPassword(uint32_t password) {
   SEND_CMD_PACKET(FINGERPRINT_SETPASSWORD, (uint8_t)(password >> 24),
                   (uint8_t)(password >> 16), (uint8_t)(password >> 8),
                   (uint8_t)(password & 0xFF));
+}
+
+/**************************************************************************/
+/*!
+    @brief   Send soft reset instruction to the module
+    @returns <code>FINGERPRINT_OK</code> on success
+    @returns Other: device is abnormal
+*/
+uint8_t Adafruit_Fingerprint::softReset(void) {
+  SEND_CMD_PACKET(FINGERPRINT_SOFT_RESET);
 }
 
 /**************************************************************************/
