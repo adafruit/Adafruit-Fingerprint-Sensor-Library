@@ -120,6 +120,25 @@ Adafruit_Fingerprint::Adafruit_Fingerprint(Stream *serial, uint32_t password) {
     @param  baudrate Sensor's UART baud rate (usually 57600, 9600 or 115200)
 */
 /**************************************************************************/
+void Adafruit_Fingerprint::begin(uint32_t baudrate) {
+  delay(1000); // one second delay to let the sensor 'boot up'
+
+  if (hwSerial)
+    hwSerial->begin(baudrate);
+#if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
+  if (swSerial)
+    swSerial->begin(baudrate);
+#endif
+}
+
+/**************************************************************************/
+/*!
+    @brief  Initializes serial interface and baud rate
+    @param  baudrate Sensor's UART baud rate (usually 57600, 9600 or 115200)
+    @param  rx pin connected to the Sensor to receive data
+    @param  tx pin connected to the Sensor to transmit data
+*/
+/**************************************************************************/
 void Adafruit_Fingerprint::begin(uint32_t baudrate, uint32_t rx, uint32_t tx) {
   delay(1000); // one second delay to let the sensor 'boot up'
 

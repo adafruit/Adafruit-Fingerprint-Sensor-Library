@@ -168,6 +168,7 @@ public:
   Adafruit_Fingerprint(HardwareSerial *hs, uint32_t password = 0x0);
   Adafruit_Fingerprint(Stream *serial, uint32_t password = 0x0);
 
+  void begin(uint32_t baud);
   void begin(uint32_t baud, uint32_t rx, uint32_t tx);
 
   boolean verifyPassword(void);
