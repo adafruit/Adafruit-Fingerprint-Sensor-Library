@@ -28,7 +28,7 @@
 
 #include "Adafruit_Fingerprint.h"
 
-//#define FINGERPRINT_DEBUG
+// #define FINGERPRINT_DEBUG
 
 /*!
  * @brief Gets the command packet
@@ -499,7 +499,7 @@ void Adafruit_Fingerprint::writeStructuredPacket(
   Serial.print((uint8_t)(wire_length & 0xFF), HEX);
 #endif
 
-  uint16_t sum = ((wire_length) >> 8) + ((wire_length)&0xFF) + packet.type;
+  uint16_t sum = ((wire_length) >> 8) + ((wire_length) & 0xFF) + packet.type;
   for (uint8_t i = 0; i < packet.length; i++) {
     mySerial->write(packet.data[i]);
     sum += packet.data[i];
@@ -578,7 +578,7 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
       packet->address[idx - 2] = byte;
       break;
     case 6:
-      if (theAddress&0xFF != packet->address[0]) {
+      if (theAddress & 0xFF != packet->address[0]) {
         return FINGERPRINT_BADPACKET;
       }
       packet->type = byte;
@@ -592,14 +592,15 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
       packet->length |= byte;
       sum += byte;
 #ifdef FINGERPRINT_DEBUG
-      Serial.print(" length "); Serial.println(packet->length); 
+      Serial.print(" length ");
+      Serial.println(packet->length); 
 #endif
       packet->length -= 2; // last 2 bytes are checksum. Thats no databytes.
       if (packet->length > sizeof(packet->data)) {
         return FINGERPRINT_BADPACKET;
       }
       break;
-      
+
     default:
       if ((idx - 8) <= packet->length) {
         packet->data[idx - 9] = byte;
@@ -610,7 +611,8 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
         } else {
           sum -= byte;
 #ifdef FINGERPRINT_DEBUG
-        Serial.print(" cs "); Serial.println(sum); 
+          Serial.print(" cs ");
+          Serial.println(sum); 
 #endif
           if (sum == 0) {
             return FINGERPRINT_OK;
