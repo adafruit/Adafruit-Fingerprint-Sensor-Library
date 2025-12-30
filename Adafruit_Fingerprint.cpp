@@ -593,7 +593,7 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
       sum += byte;
 #ifdef FINGERPRINT_DEBUG
       Serial.print(" length ");
-      Serial.println(packet->length); 
+      Serial.println(packet->length);
 #endif
       packet->length -= 2; // last 2 bytes are checksum. Thats no databytes.
       if (packet->length > sizeof(packet->data)) {
@@ -612,7 +612,7 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
           sum -= byte;
 #ifdef FINGERPRINT_DEBUG
           Serial.print(" cs ");
-          Serial.println(sum); 
+          Serial.println(sum);
 #endif
           if (sum == 0) {
             return FINGERPRINT_OK;
