@@ -16,7 +16,6 @@
 
 #include <Adafruit_Fingerprint.h>
 
-
 #if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
 // For UNO and others without hardware serial, we must use software serial...
 // pin #2 is IN from sensor (GREEN wire)
@@ -31,13 +30,12 @@ SoftwareSerial mySerial(2, 3);
 
 #endif
 
-
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
-  while (!Serial);  // For Yun/Leo/Micro/Zero/...
+  while (!Serial)
+    ; // For Yun/Leo/Micro/Zero/...
   delay(100);
   Serial.println("\n\nDelete Finger");
 
@@ -48,27 +46,29 @@ void setup()
     Serial.println("Found fingerprint sensor!");
   } else {
     Serial.println("Did not find fingerprint sensor :(");
-    while (1);
+    while (1)
+      ;
   }
 }
-
 
 uint8_t readnumber(void) {
   uint8_t num = 0;
 
   while (num == 0) {
-    while (! Serial.available());
+    while (!Serial.available())
+      ;
     num = Serial.parseInt();
   }
   return num;
 }
 
-void loop()                     // run over and over again
+void loop() // run over and over again
 {
-  Serial.println("Please type in the ID # (from 1 to 127) you want to delete...");
+  Serial.println(
+      "Please type in the ID # (from 1 to 127) you want to delete...");
   uint8_t id = readnumber();
-  if (id == 0) {// ID #0 not allowed, try again!
-     return;
+  if (id == 0) { // ID #0 not allowed, try again!
+    return;
   }
 
   Serial.print("Deleting ID #");
@@ -91,7 +91,8 @@ uint8_t deleteFingerprint(uint8_t id) {
   } else if (p == FINGERPRINT_FLASHERR) {
     Serial.println("Error writing to flash");
   } else {
-    Serial.print("Unknown error: 0x"); Serial.println(p, HEX);
+    Serial.print("Unknown error: 0x");
+    Serial.println(p, HEX);
   }
 
   return p;
