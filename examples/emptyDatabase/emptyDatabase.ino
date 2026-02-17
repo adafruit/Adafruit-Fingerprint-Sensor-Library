@@ -13,7 +13,6 @@
 
 #include <Adafruit_Fingerprint.h>
 
-
 #if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
 // For UNO and others without hardware serial, we must use software serial...
 // pin #2 is IN from sensor (GREEN wire)
@@ -28,13 +27,12 @@ SoftwareSerial mySerial(2, 3);
 
 #endif
 
-
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
-  while (!Serial);  // For Yun/Leo/Micro/Zero/...
+  while (!Serial)
+    ; // For Yun/Leo/Micro/Zero/...
   delay(100);
 
   Serial.println("\n\nDeleting all fingerprint templates!");
@@ -53,7 +51,8 @@ void setup()
     Serial.println("Found fingerprint sensor!");
   } else {
     Serial.println("Did not find fingerprint sensor :(");
-    while (1);
+    while (1)
+      ;
   }
 
   finger.emptyDatabase();
@@ -61,6 +60,4 @@ void setup()
   Serial.println("Now database is empty :)");
 }
 
-void loop() {
-}
-
+void loop() {}

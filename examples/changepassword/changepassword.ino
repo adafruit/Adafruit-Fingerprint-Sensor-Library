@@ -13,7 +13,6 @@
 
 #include <Adafruit_Fingerprint.h>
 
-
 #if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
 // For UNO and others without hardware serial, we must use software serial...
 // pin #2 is IN from sensor (GREEN wire)
@@ -32,11 +31,11 @@ SoftwareSerial mySerial(2, 3);
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 // Using sensor with password
-//Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial, 1337);
+// Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial, 1337);
 
-void setup()
-{
-  while (!Serial);  // For Yun/Leo/Micro/Zero/...
+void setup() {
+  while (!Serial)
+    ; // For Yun/Leo/Micro/Zero/...
 
   Serial.begin(9600);
   Serial.println("Adafruit fingerprint sensor, change password example");
@@ -48,7 +47,8 @@ void setup()
     Serial.println("Found fingerprint sensor!");
   } else {
     Serial.println("Did not find fingerprint sensor :(");
-    while (1);
+    while (1)
+      ;
   }
 
   Serial.print("Set password... ");
@@ -60,8 +60,4 @@ void setup()
   }
 }
 
-void loop()
-{
-
-}
-
+void loop() {}

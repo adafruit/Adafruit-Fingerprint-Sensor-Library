@@ -121,7 +121,7 @@
 #define FINGERPRINT_PACKET_SIZE_128 0X2 //!< Packet size is 128 Byte
 #define FINGERPRINT_PACKET_SIZE_256 0X3 //!< Packet size is 256 Byte
 
-//#define FINGERPRINT_DEBUG
+// #define FINGERPRINT_DEBUG
 
 #define DEFAULTTIMEOUT 1000 //!< UART reading timeout in milliseconds
 

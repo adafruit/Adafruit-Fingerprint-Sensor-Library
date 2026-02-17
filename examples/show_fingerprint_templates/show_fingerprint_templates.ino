@@ -9,7 +9,6 @@
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-
 #include <Adafruit_Fingerprint.h>
 
 #if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
@@ -26,14 +25,13 @@ SoftwareSerial mySerial(2, 3);
 
 #endif
 
-
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 int getFingerprintIDez();
 
-void setup()
-{
-  while (!Serial);
+void setup() {
+  while (!Serial)
+    ;
   Serial.begin(9600);
   Serial.println("Fingerprint template extractor");
 
@@ -44,7 +42,8 @@ void setup()
     Serial.println("Found fingerprint sensor!");
   } else {
     Serial.println("Did not find fingerprint sensor :(");
-    while (1);
+    while (1)
+      ;
   }
 
   // Try to get the templates for fingers 1 through 10
@@ -53,37 +52,45 @@ void setup()
   }
 }
 
-uint8_t downloadFingerprintTemplate(uint16_t id)
-{
+uint8_t downloadFingerprintTemplate(uint16_t id) {
   Serial.println("------------------------------------");
-  Serial.print("Attempting to load #"); Serial.println(id);
+  Serial.print("Attempting to load #");
+  Serial.println(id);
   uint8_t p = finger.loadModel(id);
   switch (p) {
-    case FINGERPRINT_OK:
-      Serial.print("Template "); Serial.print(id); Serial.println(" loaded");
-      break;
-    case FINGERPRINT_PACKETRECIEVEERR:
-      Serial.println("Communication error");
-      return p;
-    default:
-      Serial.print("Unknown error "); Serial.println(p);
-      return p;
+  case FINGERPRINT_OK:
+    Serial.print("Template ");
+    Serial.print(id);
+    Serial.println(" loaded");
+    break;
+  case FINGERPRINT_PACKETRECIEVEERR:
+    Serial.println("Communication error");
+    return p;
+  default:
+    Serial.print("Unknown error ");
+    Serial.println(p);
+    return p;
   }
 
   // OK success!
 
-  Serial.print("Attempting to get #"); Serial.println(id);
+  Serial.print("Attempting to get #");
+  Serial.println(id);
   p = finger.getModel();
   switch (p) {
-    case FINGERPRINT_OK:
-      Serial.print("Template "); Serial.print(id); Serial.println(" transferring:");
-      break;
-    default:
-      Serial.print("Unknown error "); Serial.println(p);
-      return p;
+  case FINGERPRINT_OK:
+    Serial.print("Template ");
+    Serial.print(id);
+    Serial.println(" transferring:");
+    break;
+  default:
+    Serial.print("Unknown error ");
+    Serial.println(p);
+    return p;
   }
 
-  // one data packet is 267 bytes. in one data packet, 11 bytes are 'usesless' :D
+  // one data packet is 267 bytes. in one data packet, 11 bytes are 'usesless'
+  // :D
   uint8_t bytesReceived[534]; // 2 data packets
   memset(bytesReceived, 0xff, 534);
 
@@ -94,7 +101,8 @@ uint8_t downloadFingerprintTemplate(uint16_t id)
       bytesReceived[i++] = mySerial.read();
     }
   }
-  Serial.print(i); Serial.println(" bytes read.");
+  Serial.print(i);
+  Serial.println(" bytes read.");
   Serial.println("Decoding packet...");
 
   uint8_t fingerTemplate[512]; // the real template
@@ -102,17 +110,18 @@ uint8_t downloadFingerprintTemplate(uint16_t id)
 
   // filtering only the data packets
   int uindx = 9, index = 0;
-  memcpy(fingerTemplate + index, bytesReceived + uindx, 256);   // first 256 bytes
-  uindx += 256;       // skip data
-  uindx += 2;         // skip checksum
-  uindx += 9;         // skip next header
-  index += 256;       // advance pointer
-  memcpy(fingerTemplate + index, bytesReceived + uindx, 256);   // second 256 bytes
+  memcpy(fingerTemplate + index, bytesReceived + uindx, 256); // first 256 bytes
+  uindx += 256;                                               // skip data
+  uindx += 2;                                                 // skip checksum
+  uindx += 9;   // skip next header
+  index += 256; // advance pointer
+  memcpy(fingerTemplate + index, bytesReceived + uindx,
+         256); // second 256 bytes
 
   for (int i = 0; i < 512; ++i) {
-    //Serial.print("0x");
+    // Serial.print("0x");
     printHex(fingerTemplate[i], 2);
-    //Serial.print(", ");
+    // Serial.print(", ");
   }
   Serial.println("\ndone.");
 
@@ -147,8 +156,6 @@ uint8_t downloadFingerprintTemplate(uint16_t id)
     }*/
 }
 
-
-
 void printHex(int num, int precision) {
   char tmp[16];
   char format[128];
@@ -159,6 +166,4 @@ void printHex(int num, int precision) {
   Serial.print(tmp);
 }
 
-void loop()
-{}
-
+void loop() {}

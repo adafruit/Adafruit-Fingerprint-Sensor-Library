@@ -28,7 +28,7 @@
 
 #include "Adafruit_Fingerprint.h"
 
-//#define FINGERPRINT_DEBUG
+// #define FINGERPRINT_DEBUG
 
 /*!
  * @brief Gets the command packet
@@ -514,7 +514,7 @@ void Adafruit_Fingerprint::writeStructuredPacket(
   Serial.print((uint8_t)(wire_length & 0xFF), HEX);
 #endif
 
-  uint16_t sum = ((wire_length) >> 8) + ((wire_length)&0xFF) + packet.type;
+  uint16_t sum = ((wire_length) >> 8) + ((wire_length) & 0xFF) + packet.type;
   for (uint8_t i = 0; i < packet.length; i++) {
     mySerial->write(packet.data[i]);
     sum += packet.data[i];
