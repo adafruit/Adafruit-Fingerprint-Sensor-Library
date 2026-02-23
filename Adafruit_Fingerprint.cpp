@@ -133,6 +133,21 @@ void Adafruit_Fingerprint::begin(uint32_t baudrate) {
 
 /**************************************************************************/
 /*!
+    @brief  Closes serial interface. Can be used to save performance and
+    power usage
+*/
+/**************************************************************************/
+void Adafruit_Fingerprint::end(void) {
+  if (hwSerial)
+    hwSerial->end();
+#if defined(__AVR__) || defined(ESP8266) || defined(FREEDOM_E300_HIFIVE1)
+  if (swSerial)
+    swSerial->end();
+#endif
+}
+
+/**************************************************************************/
+/*!
     @brief  Verifies the sensors' access password (default password is
    0x0000000). A good way to also check if the sensors is active and responding
     @returns True if password is correct
