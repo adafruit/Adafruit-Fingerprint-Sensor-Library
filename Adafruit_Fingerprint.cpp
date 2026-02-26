@@ -307,16 +307,9 @@ uint8_t Adafruit_Fingerprint::emptyDatabase(void) {
 uint8_t Adafruit_Fingerprint::fingerFastSearch(void) {
   // high speed search of slot #1 starting at page 0x0000 and page #0x00A3
   GET_CMD_PACKET(FINGERPRINT_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3);
-  fingerID = 0xFFFF;
-  confidence = 0xFFFF;
 
-  fingerID = packet.data[1];
-  fingerID <<= 8;
-  fingerID |= packet.data[2];
-
-  confidence = packet.data[3];
-  confidence <<= 8;
-  confidence |= packet.data[4];
+  fingerID = (uint16_t)packet.data[1] << 8 | packet.data[2];
+  confidence = (uint16_t)packet.data[3] << 8 | packet.data[4];
 
   return packet.data[0];
 }
@@ -370,16 +363,8 @@ uint8_t Adafruit_Fingerprint::fingerSearch(uint8_t slot) {
   GET_CMD_PACKET(FINGERPRINT_SEARCH, slot, 0x00, 0x00, (uint8_t)(capacity >> 8),
                  (uint8_t)(capacity & 0xFF));
 
-  fingerID = 0xFFFF;
-  confidence = 0xFFFF;
-
-  fingerID = packet.data[1];
-  fingerID <<= 8;
-  fingerID |= packet.data[2];
-
-  confidence = packet.data[3];
-  confidence <<= 8;
-  confidence |= packet.data[4];
+  fingerID = (uint16_t)packet.data[1] << 8 | packet.data[2];
+  confidence = (uint16_t)packet.data[3] << 8 | packet.data[4];
 
   return packet.data[0];
 }
@@ -552,7 +537,7 @@ uint8_t
 Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
                                           uint16_t timeout) {
   uint8_t byte;
-  uint16_t idx = 0, timer = 0;
+  uint16_t idx = 0, timer = 0, sum = 0;
 
 #ifdef FINGERPRINT_DEBUG
   Serial.print("<- ");
@@ -593,28 +578,52 @@ Adafruit_Fingerprint::getStructuredPacket(Adafruit_Fingerprint_Packet *packet,
       packet->address[idx - 2] = byte;
       break;
     case 6:
+      if (theAddress & 0xFF != packet->address[0]) {
+        return FINGERPRINT_BADPACKET;
+      }
       packet->type = byte;
+      sum = byte;
       break;
     case 7:
       packet->length = (uint16_t)byte << 8;
+      sum += byte;
       break;
     case 8:
       packet->length |= byte;
-      break;
-    default:
-      packet->data[idx - 9] = byte;
-      if ((idx - 8) == packet->length) {
+      sum += byte;
 #ifdef FINGERPRINT_DEBUG
-        Serial.println(" OK ");
+      Serial.print(" length ");
+      Serial.println(packet->length);
 #endif
-        return FINGERPRINT_OK;
+      packet->length -= 2; // last 2 bytes are checksum. Thats no databytes.
+      if (packet->length > sizeof(packet->data)) {
+        return FINGERPRINT_BADPACKET;
+      }
+      break;
+
+    default:
+      if ((idx - 8) <= packet->length) {
+        packet->data[idx - 9] = byte;
+        sum += byte;
+      } else {
+        if ((idx - 8 - 1) == packet->length) {
+          sum -= (uint16_t)byte << 8;
+        } else {
+          sum -= byte;
+#ifdef FINGERPRINT_DEBUG
+          Serial.print(" cs ");
+          Serial.println(sum);
+#endif
+          if (sum == 0) {
+            return FINGERPRINT_OK;
+          } else {
+            return FINGERPRINT_BADPACKET;
+          }
+        }
       }
       break;
     }
     idx++;
-    if ((idx + 9) >= sizeof(packet->data)) {
-      return FINGERPRINT_BADPACKET;
-    }
   }
   // Shouldn't get here so...
   return FINGERPRINT_BADPACKET;
